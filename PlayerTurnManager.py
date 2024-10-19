@@ -1,11 +1,14 @@
+##################################################
+## {Description}
+##################################################
+## Author: Nick Weiner
+##################################################
+
 from enum import Enum
 
-def __init__(self, players):
-    self.num_players = players
-
 class PlayerTurnManager:
-    def __init__(self):
-        pass
+    def __init__(self, players):
+        self.players = players
 
     def next_turn(self):
         raise NotImplementedError()
