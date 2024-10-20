@@ -8,21 +8,24 @@ Author: Nick Weiner
 Date: 2024-10-20
 """
 import json
+
+import claimsLog
 from player import Player
 from playerTurnManager import PlayerTurnManager
 
 class GameManager:
 
-    def __init__(self, players, rooms, weapons, map):
+    def __init__(self, players, weapons, claimsLog):
         self.players = players
         self.index = 0
         self.weapons = weapons
-        self.map = map
+        self.claimsLog = claimsLog
 
     def json_serialize(self):
         data = {
             "players": [player.json_serialize() for player in self.players],
             "weapons": [weapon.json_serialize() for weapon in self.weapons],
+            "claims": claimsLog.json_serialize()
         }
 
         return json.dumps(data)
