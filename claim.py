@@ -1,8 +1,15 @@
-##################################################
-## {Description}
-##################################################
-## Author: Nick Weiner
-##################################################
+#!/usr/bin/env python3
+
+"""
+Claim Module
+
+This module contains the Claim class and its subclasses:
+- Suggestion: Represents a suggestion made by a player
+- Accusation: Represents an accusation made by a player
+
+Author: Stephen "Christian" Kocsis
+Date: 2024-10-19
+"""
 import json
 from abc import ABC, abstractmethod
 

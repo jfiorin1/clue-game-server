@@ -1,8 +1,16 @@
-##################################################
-## {Description}
-##################################################
-## Author: Nick Weiner
-##################################################
+#!/usr/bin/env python3
+
+"""
+Card Module
+
+This module contains the Card class and its subclasses:
+- CharacterCard: Represents a character in the game
+- Weapon: Represents a weapon in the game
+- Room: Represents a room in the game
+
+Author: Stephen "Christian" Kocsis
+Date: 2024-10-19
+"""
 import json
 from abc import ABC, abstractmethod
 
