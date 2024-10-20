@@ -1,8 +1,11 @@
-##################################################
-## {Description}
-##################################################
-## Author: Nick Weiner
-##################################################
+#!/usr/bin/env python3
+"""
+Room Module
+
+This module contains the Room Enum
+Author: Nick Weiner
+Date: 2024-10-19
+"""
 
 from enum import Enum
 

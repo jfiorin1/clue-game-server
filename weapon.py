@@ -1,8 +1,11 @@
-##################################################
-## {Description}
-##################################################
-## Author: Nick Weiner
-##################################################
+#!/usr/bin/env python3
+"""
+Player Module
+
+This module contains the Weapon Class and the WeaponName Enum
+Author: Nick Weiner
+Date: 2024-10-19
+"""
 
 from enum import Enum
 

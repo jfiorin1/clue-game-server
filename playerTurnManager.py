@@ -1,8 +1,11 @@
-##################################################
-## {Description}
-##################################################
-## Author: Nick Weiner
-##################################################
+#!/usr/bin/env python3
+"""
+PlayerTurnManager Module
+
+This module contains the PlayerTurnManager Class and its associated classes and functions
+Author: Nick Weiner
+Date: 2024-10-19
+"""
 
 from enum import Enum
 

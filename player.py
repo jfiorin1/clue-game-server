@@ -1,8 +1,11 @@
-##################################################
-## {Description}
-##################################################
-## Author: Nick Weiner
-##################################################
+#!/usr/bin/env python3
+"""
+Player Module
+
+This module contains the Player Class and the ClueCharacter Enum
+Author: Nick Weiner
+Date: 2024-10-19
+"""
 
 from enum import Enum
 import json
