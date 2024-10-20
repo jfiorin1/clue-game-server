@@ -29,9 +29,7 @@ class CharacterCard(Card):
 
     def json_serialize(self):
         data = {
-            "card": {
-                "character": self.character.name
-            }
+            "character_card":  self.character.name
         }
 
         return json.dumps(data)
@@ -43,9 +41,7 @@ class WeaponCard(Card):
 
     def json_serialize(self):
         data = {
-            "card": {
-                "weapon": self.weapon.get_name()
-            }
+            "weapon_card":  self.weapon.get_name()
         }
 
         return json.dumps(data)
@@ -57,7 +53,5 @@ class RoomCard(Card):
 
     def json_serialize(self):
         data = {
-            "card": {
-                "room": self.room.name
-            }
+            "room_card": self.room.name
         }

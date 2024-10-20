@@ -32,6 +32,13 @@ class Room(Enum):
         KITCHEN: (4, 4)
     }
 
+    # Reverse the dictionary
+    coordinate_to_room = {v: k for k, v in _room_coordinates.items()}
+
+    @staticmethod
+    def get_room_by_coordinate(coordinate):
+        return Room.coordinate_to_room.get(coordinate, None)
+
     @property
     def coordinates(self):
         return Room._room_coordinates[self]

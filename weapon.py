@@ -6,7 +6,7 @@ This module contains the Weapon Class and the WeaponName Enum
 Author: Nick Weiner
 Date: 2024-10-19
 """
-
+import json
 from enum import Enum
 
 class Weapon:
@@ -21,10 +21,21 @@ class Weapon:
     def get_name(self):
         return self.name.value
 
-    class WeaponName(Enum):
-        CANDLESTICK = "Candlestick"
-        DAGGER = "Dagger"
-        LEAD_PIPE = "Lead Pipe"
-        REVOLVER = "Revolver"
-        ROPE = "Rope"
-        WRENCH = "Wrench"
+    @staticmethod
+    def get_unassigned_weapons():
+        return [Weapon(name, None) for name in WeaponName]
+
+    def json_serialize(self):
+        data = {
+            "name": self.name,
+            "room": self.room.coordinates
+        }
+        return json.dumps(data)
+
+class WeaponName(Enum):
+    CANDLESTICK = "Candlestick"
+    DAGGER = "Dagger"
+    LEAD_PIPE = "Lead Pipe"
+    REVOLVER = "Revolver"
+    ROPE = "Rope"
+    WRENCH = "Wrench"
