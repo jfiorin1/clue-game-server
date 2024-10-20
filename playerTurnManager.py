@@ -9,9 +9,12 @@ Date: 2024-10-19
 
 from enum import Enum
 
-class PlayerTurn:
+class PlayerTurnManager:
     def __init__(self):
         self.phase = TurnPhase.ROLL
+
+    def start_turn(self):
+        raise NotImplementedError()
 
     def next_phase(self):
         raise NotImplementedError()

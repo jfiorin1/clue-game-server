@@ -10,11 +10,14 @@ Date: 2024-10-19
 from enum import Enum
 import json
 
+from playerTurnManager import PlayerTurnManager
+
 class Player:
     def __init__(self, name, character):
         self.name = name
         self.character = character
         self.position = character.get_default_position
+        self.turn = PlayerTurnManager()
 
         self.cards = []
         self.notes = ""
