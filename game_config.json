@@ -1,0 +1,15 @@
+{
+    "characters": [
+        { "name": "Miss Scarlet", "location": "Start" },
+        { "name": "Professor Plum", "location": "Start" },
+        { "name": "Mr. Green", "location": "Start" },
+        { "name": "Mrs. Peacock", "location": "Start" },
+        { "name": "Colonel Mustard", "location": "Start" },
+        { "name": "Mrs. White", "location": "Start" }
+    ],
+    "rooms": [
+        "Study", "Lounge", "Library", "Billiard Room",
+        "Dining Room", "Conservatory", "Ballroom", "Kitchen"
+    ],
+    "weapons": ["Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Wrench"]
+}
