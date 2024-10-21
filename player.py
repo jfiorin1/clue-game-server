@@ -8,7 +8,6 @@ Date: 2024-10-19
 """
 
 from enum import Enum
-import json
 
 from playerTurnManager import PlayerTurnManager
 
@@ -16,7 +15,7 @@ class Player:
     def __init__(self, name, character):
         self.name = name
         self.character = character
-        self.position = character.get_default_position
+        self.position = character.get_default_position()
         self.turn = PlayerTurnManager()
 
         self.cards = []
@@ -30,26 +29,37 @@ class Player:
     def set_position(self, x, y):
         self.position = (x, y)
 
-    def add_card(self, card):
-        self.cards.append(card)
+    def get_position(self):
+        return self.position
+
+    def add_cards(self, cards):
+        for card in cards:
+            card.player = self
+        self.cards += cards
+
+    def get_cards(self):
+        return self.cards
 
     def add_note(self, note):
         self.notes += note
 
-    def get_cards_string(self):
-        return [card.json_serialize() for card in self.cards]
+    def _get_cards_string(self):
+        return [card.dict() for card in self.cards]
 
-    def json_serialize(self):
+    def dict(self):
         data = {
             "name": self.name,
-            "character": self.character.name,
-            "position": self.position,
-            "cards": self.get_cards_string(), # could be a future issue, not sure how nesting dumps works
+            "character": self.character.value,
+            "position": {
+                "x": self.position[0],
+                "y": self.position[1]
+            },
+            "cards": self._get_cards_string(), # could be a future issue, not sure how nesting dumps works
             "notes": self.notes,
             "is_active": self.is_active
         }
 
-        return json.dumps(data)
+        return data
 
 
 class ClueCharacter(Enum):
@@ -61,4 +71,4 @@ class ClueCharacter(Enum):
     REVEREND_GREEN = "Reverend Green"
 
     def get_default_position(self):
-        raise NotImplementedError()
+        return 0, 0

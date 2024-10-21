@@ -11,47 +11,58 @@ This module contains the Card class and its subclasses:
 Author: Stephen "Christian" Kocsis
 Date: 2024-10-19
 """
-import json
 from abc import ABC, abstractmethod
 
 class Card(ABC):
-    def __init__(self, player):
+    def __init__(self, player=None):
         self.player = player
 
     @abstractmethod
-    def json_serialize(self):
+    def dict(self):
+        pass
+
+    @abstractmethod
+    def get_subject(self):
         pass
 
 class CharacterCard(Card):
-    def __init__(self, player, character):
-        super().__init__(player)
+    def __init__(self, character):
+        super().__init__()
         self.character = character
 
-    def json_serialize(self):
+    def dict(self):
         data = {
-            "character_card":  self.character.name
+            "character_card":  self.character.value
         }
+        return data
 
-        return json.dumps(data)
+    def get_subject(self):
+        return self.character
 
 class WeaponCard(Card):
-    def __init__(self, player, weapon):
-        super().__init__(player)
+    def __init__(self, weapon):
+        super().__init__()
         self.weapon = weapon
 
-    def json_serialize(self):
+    def dict(self):
         data = {
             "weapon_card":  self.weapon.get_name()
         }
+        return data
 
-        return json.dumps(data)
+    def get_subject(self):
+        return self.weapon
 
 class RoomCard(Card):
-    def __init__(self, player, room):
-        super().__init__(player)
+    def __init__(self, room):
+        super().__init__()
         self.room = room
 
-    def json_serialize(self):
+    def dict(self):
         data = {
-            "room_card": self.room.name
+            "room_card": self.room.value
         }
+        return data
+
+    def get_subject(self):
+        return self.room

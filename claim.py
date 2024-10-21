@@ -10,7 +10,6 @@ This module contains the Claim class and its subclasses:
 Author: Stephen "Christian" Kocsis
 Date: 2024-10-19
 """
-import json
 from abc import ABC, abstractmethod
 
 class Claim(ABC):
@@ -25,35 +24,35 @@ class Claim(ABC):
         pass
 
     @abstractmethod
-    def json_serialize(self):
+    def dict(self):
         pass
 
 class Suggestion(Claim):
     def make_string(self):
-        return f"I suggest it was {self.character.name} with the {self.weapon} in the {self.room}"
+        return f"I suggest it was {self.character.value} with the {self.weapon.get_name()} in the {self.room.value}"
 
-    def json_serialize(self):
+    def dict(self):
         data = {
             "suggestion": {
-                "character": self.character,
-                "weapon": self.weapon,
-                "room": self.room
+                "character": self.character.name,
+                "weapon": self.weapon.get_name_enum().name,
+                "room": self.room.name
             }
         }
 
-        return json.dumps(data)
+        return data
 
 class Accuse(Claim):
     def make_string(self):
-        return f"I accuse {self.character.name} with the {self.weapon} in the {self.room}"
+        return f"I accuse {self.character.value} with the {self.weapon.get_name()} in the {self.room.value}"
 
-    def json_serialize(self):
+    def dict(self):
         data = {
             "accusation": {
-                "character": self.character,
-                "weapon": self.weapon,
-                "room": self.room
+                "character": self.character.name,
+                "weapon": self.weapon.get_name_enum().name,
+                "room": self.room.name
             }
         }
 
-        return json.dumps(data)
+        return data

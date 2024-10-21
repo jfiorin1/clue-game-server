@@ -13,6 +13,9 @@ class PlayerTurnManager:
     def __init__(self):
         self.phase = TurnPhase.ROLL
 
+    def get_current_phase(self):
+        return self.phase
+
     def start_turn(self):
         raise NotImplementedError()
 

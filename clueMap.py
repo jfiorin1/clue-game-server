@@ -13,25 +13,26 @@ import json
 from room import Room
 from gameManager import gameManager
 
-class Map:
+class ClueMap:
 
     def __init__(self):
-        self.room_map = [[None] * 5] * 5
-        self.weapon_map = [[None] * 5] * 5
+        self.weapon_map = {}
         self.player_map = [[None] * 5] * 5
-
-        for i in range(5):
-            for j in range(5):
-                self.room_map[i][j] = Room.get_room_by_coordinate((i, j))
 
         for player in gameManager.players:
             position = player.character.get_default_position()
             self.player_map[position[0]][position[1]] = player
 
         for weapon in gameManager.weapons:
-            weapon.room = random.sample(self.room_map, 1)
-            coordinate = weapon.room.get_coordinate()
-            self.weapon_map[coordinate[0]][coordinate[1]] = weapon
+            rooms = [room for room in Room]
+            weapon.room = rooms[random.randint(0, len(Room) - 1)]
+            self.weapon_map[weapon] = weapon.room
+
+    def get_weapons_map(self):
+        return self.weapon_map
+
+    def get_player_map(self):
+        return self.player_map
 
     def move_weapon(self, weapon, new_room):
         yield NotImplementedError

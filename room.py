@@ -20,25 +20,23 @@ class Room(Enum):
     BALLROOM = "Ballroom"
     KITCHEN = "Kitchen"
 
-    _room_coordinates = {
-        STUDY: (0, 0),
-        HALL: (2, 0),
-        LOUNGE: (4, 0),
-        LIBRARY: (0, 2),
-        BILLIARD: (2, 2),
-        DINING: (4, 2),
-        CONSERVATORY: (0, 4),
-        BALLROOM: (2, 4),
-        KITCHEN: (4, 4)
-    }
-
-    # Reverse the dictionary
-    coordinate_to_room = {v: k for k, v in _room_coordinates.items()}
+    def get_coordinates(self):
+        return _room_coordinates[self]
 
     @staticmethod
-    def get_room_by_coordinate(coordinate):
-        return Room.coordinate_to_room.get(coordinate, None)
+    def get_room(coordinates):
+        return _reversed_coordinates.get(coordinates, None)
 
-    @property
-    def coordinates(self):
-        return Room._room_coordinates[self]
+_room_coordinates = {
+    Room.STUDY: (0, 0),
+    Room.HALL: (2, 0),
+    Room.LOUNGE: (4, 0),
+    Room.LIBRARY: (0, 2),
+    Room.BILLIARD: (2, 2),
+    Room.DINING: (4, 2),
+    Room.CONSERVATORY: (0, 4),
+    Room.BALLROOM: (2, 4),
+    Room.KITCHEN: (4, 4)
+}
+
+_reversed_coordinates = {v: k for k, v in _room_coordinates.items()}

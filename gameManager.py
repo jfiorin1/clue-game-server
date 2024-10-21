@@ -9,23 +9,30 @@ Date: 2024-10-20
 """
 import json
 
-import claimsLog
-from player import Player
-from playerTurnManager import PlayerTurnManager
+from claimsLog import ClaimsLog
+from weapon import WeaponName, Weapon
+
 
 class GameManager:
 
-    def __init__(self, players, weapons, claimsLog):
+    def __init__(self, players=None):
+        if players is None:
+            players = []
         self.players = players
         self.index = 0
-        self.weapons = weapons
-        self.claimsLog = claimsLog
+        self.weapons = []
+
+        for name in WeaponName:
+            weapon = Weapon(name)
+            self.weapons.append(weapon)
+
+        self.claims_log = ClaimsLog()
 
     def json_serialize(self):
         data = {
-            "players": [player.json_serialize() for player in self.players],
-            "weapons": [weapon.json_serialize() for weapon in self.weapons],
-            "claims": claimsLog.json_serialize()
+            "players": [player.dict() for player in self.players],
+            "weapons": [weapon.dict() for weapon in self.weapons],
+            "claims": self.claims_log.array_of_claims_dicts()
         }
 
         return json.dumps(data)

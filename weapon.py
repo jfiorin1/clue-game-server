@@ -6,12 +6,12 @@ This module contains the Weapon Class and the WeaponName Enum
 Author: Nick Weiner
 Date: 2024-10-19
 """
-import json
 from enum import Enum
+from room import Room
 
 class Weapon:
 
-    def __init__(self, name, room):
+    def __init__(self, name, room: Room = None):
         self.name = name
         self.room = room
 
@@ -21,16 +21,30 @@ class Weapon:
     def get_name(self):
         return self.name.value
 
+    def get_name_enum(self):
+        return self.name
+
+    def get_room(self):
+        return self.room
+
+    def set_room(self, room):
+        self.room = room
+
     @staticmethod
     def get_unassigned_weapons():
         return [Weapon(name, None) for name in WeaponName]
 
-    def json_serialize(self):
+    def dict(self):
+        if self.room is None:
+            coordinates = None
+        else:
+            coordinates = self.room.coordinates
+
         data = {
-            "name": self.name,
-            "room": self.room.coordinates
+            "name": self.get_name(),
+            "room": coordinates
         }
-        return json.dumps(data)
+        return data
 
 class WeaponName(Enum):
     CANDLESTICK = "Candlestick"
