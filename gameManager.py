@@ -41,8 +41,8 @@ class GameManager:
 
         return json.dumps(data)
 
-    def send_gamestate_to_client(self):
-        self.websocket.send(self.json_serialize())
+    async def send_gamestate_to_client(self):
+        await self.websocket.send(self.json_serialize())
 
     def next_phase(self):
         self.players[self.index].turn.next_phase()

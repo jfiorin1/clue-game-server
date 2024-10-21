@@ -6,15 +6,15 @@ from gameManager import GameManager
 
 game_manager = GameManager()
 
+
 # this will recieve a message and print to the console
 async def handler(websocket):
     game_manager.set_websocket(websocket)
     await websocket.send(json.dumps("Hello from server!"))
+    await game_manager.send_gamestate_to_client()
     async for message in websocket:
         # handle message appropriately and update game state
         print(message)
-        # send back a dummy message
-        await websocket.send("Message receieved and updated game state")
 
 
 # start server to run forever
