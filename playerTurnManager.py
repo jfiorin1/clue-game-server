@@ -11,7 +11,7 @@ from enum import Enum
 
 class PlayerTurnManager:
     def __init__(self):
-        self.phase = TurnPhase.ROLL
+        self.phase = TurnPhase.START
 
     def get_current_phase(self):
         return self.phase
@@ -27,7 +27,7 @@ class PlayerTurnManager:
         raise NotImplementedError()
 
 class TurnPhase(Enum):
-    ROLL = 0
+    START = 0
     MOVE = 1
     SUGGEST = 2
     REFUTE = 3

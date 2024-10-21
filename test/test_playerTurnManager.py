@@ -8,7 +8,7 @@ class MyTestCase(unittest.TestCase):
         self.manager = PlayerTurnManager()
 
     def test_init(self):
-        self.assertEqual(self.manager.get_current_phase(), TurnPhase.ROLL)
+        self.assertEqual(self.manager.get_current_phase(), TurnPhase.START)
 
 
 
