@@ -77,7 +77,7 @@ class Accusation(Claim):
             "type": "accusation"
         }
 
-    @classmethod # 
+    @classmethod # Class method - bvound to the class and not the instance of the class
     def deserialize(cls, data):
         """Deserialize accusation data from a dictionary."""
         accusation = cls(data['player_name'], data['weapon'], data['character'], data['room'])
