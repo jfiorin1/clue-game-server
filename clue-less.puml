@@ -11,13 +11,16 @@ class GameManager {
     next_player()
 }
 
-GameManager "1" o-- "*" Player
-GameManager "1" o-- "*" Weapon
+GameManager "1" o--> "0..*" Player
+GameManager "1" o--> "*" Weapon
 GameManager "1" --> "*" WeaponName: refers to
-GameManager "1" *-- "1" ClaimsLog
-GameManager "1" *-- "1" ClueMap
+GameManager "1" *--> "1" ClaimsLog
+GameManager "1" *--> "1" ClueMap
 
 note "Point is an alias for (Int, Int)" as n
+note "Global variable gameManager" as g
+
+GameManager -- g
 
 class Player {
     <<get/set>> name: string
@@ -31,9 +34,9 @@ class Player {
     dict() : dict
 }
 
-Player "1" --> "1" ClueCharacter : plays
-Player "1" o-- "*" Card : has
-Player "1" *-- "1" PlayerTurnManager
+Player "1" o--> "1" ClueCharacter
+Player "1" o--> "*" Card
+Player "1" *--> "1" PlayerTurnManager
 n .. Player
 
 enum ClueCharacter {
@@ -55,8 +58,8 @@ class Weapon {
     {static} generate_unassinged_weapons(): List<Weapon>
 }
 
-Weapon *-- WeaponName
-Weapon -- Room: inside of
+Weapon "1" o--> "1" WeaponName
+Weapon "1" o--> "0..1" Room
 
 enum WeaponName {
     <<Candlestick>>
@@ -72,17 +75,17 @@ class ClaimsLog {
     array_of_claim_dicts(): List<dict>
 }
 
-ClaimsLog *-- Claim
+ClaimsLog "1" *--> "*" Claim
 
 abstract class Claim {
     make_string(): string
     dict(): dict
 }
 
-Claim --> ClueCharacter: refers to
-Claim --> Weapon: refers to
-Claim --> Room: refers to
-Claim <--> Player
+Claim "1" o--> "1" ClueCharacter
+Claim "1" o--> "1" Weapon
+Claim "1" o--> "1" Room
+Claim "1" o--> "1" Player
 
 class Suggestion extends Claim
 class Accuse extends Claim
@@ -96,9 +99,9 @@ class CharacterCard implements Card
 class WeaponCard implements Card
 class RoomCard implements Card
 
-CharacterCard --> ClueCharacter
-RoomCard --> Room
-WeaponCard --> Weapon
+CharacterCard "1" o--> "1" ClueCharacter
+RoomCard "1" o--> "1" Room
+WeaponCard "1" o--> "1" Weapon
 
 class ClueMap {
     <<get>> weapon_map: dict<Weapon, Room>
@@ -106,7 +109,23 @@ class ClueMap {
     move_weapon(weapon, new_room)
 }
 
-ClueMap o-- Weapon
-ClueMap o-- Player
+ClueMap "1" o--> "*" Weapon
+ClueMap "1" o--> "*" Player
+ClueMap "1" --> "*" Room: refers to
+ClueMap -- g
+
+class Room {
+    <<Study>>
+    <<Hall>>
+    <<Lounge>>
+    <<Library>>
+    <<Billiard Room>>
+    <<Dining Room>>
+    <<Conservatory>>
+    <<Ballroom>>
+    <<Kitchen>>
+    get_coordinates() : Point
+    {static} get_room(coordinates: Point): Room
+}
 
 @enduml
