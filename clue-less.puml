@@ -128,4 +128,21 @@ class Room {
     {static} get_room(coordinates: Point): Room
 }
 
+class PlayerTurnManager {
+    get_current_phase()
+    start_turn()
+    next_phase()
+    skip_to_accuse()
+}
+
+PlayerTurnManager -- TurnPhase
+
+enum TurnPhase {
+    <<0>>
+    <<1>>
+    <<2>>
+    <<3>>
+    <<4>>
+}
+
 @enduml
