@@ -14,7 +14,8 @@ from abc import ABC, abstractmethod
 
 class Claim(ABC):
 
-    def __init__(self, character, weapon, room):
+    def __init__(self, player, character, weapon, room):
+        self.player = player
         self.character = character
         self.weapon = weapon
         self.room = room
@@ -34,6 +35,7 @@ class Suggestion(Claim):
     def dict(self):
         data = {
             "suggestion": {
+                "player": self.player,
                 "character": self.character.name,
                 "weapon": self.weapon.get_name_enum().name,
                 "room": self.room.name
@@ -49,6 +51,7 @@ class Accuse(Claim):
     def dict(self):
         data = {
             "accusation": {
+                "player": self.player,
                 "character": self.character.name,
                 "weapon": self.weapon.get_name_enum().name,
                 "room": self.room.name

@@ -10,6 +10,7 @@ Date: 2024-10-20
 import json
 
 from claimsLog import ClaimsLog
+from clueMap import ClueMap
 from weapon import WeaponName, Weapon
 
 
@@ -22,6 +23,7 @@ class GameManager:
         self.index = 0
         self.weapons = []
         self.websocket = None
+        self.clue_map = ClueMap()
 
         for name in WeaponName:
             weapon = Weapon(name)

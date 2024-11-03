@@ -31,7 +31,7 @@ class Weapon:
         self.room = room
 
     @staticmethod
-    def get_unassigned_weapons():
+    def generate_unassigned_weapons():
         return [Weapon(name, None) for name in WeaponName]
 
     def dict(self):

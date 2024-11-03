@@ -1,0 +1,112 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class GameManager {
+    index: Int
+    websocket: Websocket
+    set_websocket(websocket: Websocket)
+    json_serialize(): String
+    async send_gamestate_to_client()
+    next_phase()
+    next_player()
+}
+
+GameManager "1" o-- "*" Player
+GameManager "1" o-- "*" Weapon
+GameManager "1" --> "*" WeaponName: refers to
+GameManager "1" *-- "1" ClaimsLog
+GameManager "1" *-- "1" ClueMap
+
+note "Point is an alias for (Int, Int)" as n
+
+class Player {
+    <<get/set>> name: string
+    <<get/set>> position: Point
+    notes: string
+    is_active: bool
+    void add_cards(cards: List<Card>)
+    void add_note(note: string)
+    get_cards() : List<Card>
+    _get_cards_string() : List<string>
+    dict() : dict
+}
+
+Player "1" --> "1" ClueCharacter : plays
+Player "1" o-- "*" Card : has
+Player "1" *-- "1" PlayerTurnManager
+n .. Player
+
+enum ClueCharacter {
+    <<Mrs. White>>
+    <<Mrs. Peacock>>
+    <<Professor Plum>>
+    <<Colonel Mustard>>
+    <<Miss Scarlet>>
+    <<Reverend Green>>
+    {static} get_default_position(): Point
+}
+
+class Weapon {
+    get_name(): String
+    get_name_enum(): WeaponName
+    get_room(): Room
+    set_room(room: Room)
+    dict(): dict
+    {static} generate_unassinged_weapons(): List<Weapon>
+}
+
+Weapon *-- WeaponName
+Weapon -- Room: inside of
+
+enum WeaponName {
+    <<Candlestick>>
+    <<Dagger>>
+    <<Lead Pipe>>
+    <<Revolver>>
+    <<Rope>>
+    <<Wrench>>
+}
+
+class ClaimsLog {
+    add_claim(claim: Claim)
+    array_of_claim_dicts(): List<dict>
+}
+
+ClaimsLog *-- Claim
+
+abstract class Claim {
+    make_string(): string
+    dict(): dict
+}
+
+Claim --> ClueCharacter: refers to
+Claim --> Weapon: refers to
+Claim --> Room: refers to
+Claim <--> Player
+
+class Suggestion extends Claim
+class Accuse extends Claim
+
+interface Card {
+    dict(): dict
+    get_subject(): Any
+}
+
+class CharacterCard implements Card
+class WeaponCard implements Card
+class RoomCard implements Card
+
+CharacterCard --> ClueCharacter
+RoomCard --> Room
+WeaponCard --> Weapon
+
+class ClueMap {
+    <<get>> weapon_map: dict<Weapon, Room>
+    <<get>> player_map: List<List<None | Player>>
+    move_weapon(weapon, new_room)
+}
+
+ClueMap o-- Weapon
+ClueMap o-- Player
+
+@enduml
