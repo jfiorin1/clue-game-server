@@ -13,14 +13,15 @@ class GameManager {
 
 GameManager "1" o--> "0..*" Player
 GameManager "1" o--> "*" Weapon
-GameManager "1" --> "*" WeaponName: refers to
+GameManager "1" --> "*" WeaponName: refers to collection of
 GameManager "1" *--> "1" ClaimsLog
 GameManager "1" *--> "1" ClueMap
 
 note "Point is an alias for (Int, Int)" as n
-note "Global variable gameManager" as g
+note "<<get/set>> indicates the presence of a getter/setter class for a specific variable" as n2
+note "Global variable gameManager: GameManager" as g
 
-GameManager -- g
+GameManager -[dashed]- g: instance of
 
 class Player {
     <<get/set>> name: string
@@ -37,15 +38,14 @@ class Player {
 Player "1" o--> "1" ClueCharacter
 Player "1" o--> "*" Card
 Player "1" *--> "1" PlayerTurnManager
-n .. Player
 
 enum ClueCharacter {
-    <<Mrs. White>>
-    <<Mrs. Peacock>>
-    <<Professor Plum>>
-    <<Colonel Mustard>>
-    <<Miss Scarlet>>
-    <<Reverend Green>>
+    <<MRS_WHITE = "Mrs. White">>
+    <<MRS_PEACOCK = "Mrs. Peacock">>
+    <<PROFESSOR_PLUM = "Professor Plum">>
+    <<COLONEL_MUSTARD = "Colonel Mustard">>
+    <<MISS_SCARLETT = "Miss Scarlett">>
+    <<REVEREND_GREEN = "Reverend Green">>
     {static} get_default_position(): Point
 }
 
@@ -62,12 +62,12 @@ Weapon "1" o--> "1" WeaponName
 Weapon "1" o--> "0..1" Room
 
 enum WeaponName {
-    <<Candlestick>>
-    <<Dagger>>
-    <<Lead Pipe>>
-    <<Revolver>>
-    <<Rope>>
-    <<Wrench>>
+    <<CANDLESTICK = "Candlestick">>
+    <<DAGGER = "Dagger">>
+    <<LEAD_PIPE = "Lead Pipe">>
+    <<REVOLVER = "Revolver">>
+    <<ROPE = "Rope">>
+    <<WRENCH = "Wrench">>
 }
 
 class ClaimsLog {
@@ -78,8 +78,8 @@ class ClaimsLog {
 ClaimsLog "1" *--> "*" Claim
 
 abstract class Claim {
-    make_string(): string
-    dict(): dict
+    {abstract} make_string(): string
+    {abstract} dict(): dict
 }
 
 Claim "1" o--> "1" ClueCharacter
@@ -87,17 +87,32 @@ Claim "1" o--> "1" Weapon
 Claim "1" o--> "1" Room
 Claim "1" o--> "1" Player
 
-class Suggestion extends Claim
-class Accuse extends Claim
+class Suggestion extends Claim {
+    make_string(): string
+    dict(): dict
+}
+class Accuse extends Claim {
+    make_string(): string
+    dict(): dict
+}
 
 interface Card {
+    {abstract} dict(): dict
+    {abstract} get_subject(): Any
+}
+
+class CharacterCard implements Card {
     dict(): dict
     get_subject(): Any
 }
-
-class CharacterCard implements Card
-class WeaponCard implements Card
-class RoomCard implements Card
+class WeaponCard implements Card {
+    dict(): dict
+    get_subject(): Any
+}
+class RoomCard implements Card {
+    dict(): dict
+    get_subject(): Any
+}
 
 CharacterCard "1" o--> "1" ClueCharacter
 RoomCard "1" o--> "1" Room
@@ -111,19 +126,19 @@ class ClueMap {
 
 ClueMap "1" o--> "*" Weapon
 ClueMap "1" o--> "*" Player
-ClueMap "1" --> "*" Room: refers to
-ClueMap -- g
+ClueMap "1" --> "*" Room: refers to collection of
+ClueMap --> g: accesses
 
-class Room {
-    <<Study>>
-    <<Hall>>
-    <<Lounge>>
-    <<Library>>
-    <<Billiard Room>>
-    <<Dining Room>>
-    <<Conservatory>>
-    <<Ballroom>>
-    <<Kitchen>>
+enum Room {
+    <<STUDY = "Study">>
+    <<HALL = "Hall">>
+    <<LOUNGE = "Lounge">>
+    <<LIBRARY = "Library">>
+    <<BILLIARD = "Billiard Room">>
+    <<DINING = "Dining Room">>
+    <<CONSERVATORY = "Conservatory">>
+    <<BALLROOM = "Ballroom">>
+    <<KITCHEN = "Kitchen">>
     get_coordinates() : Point
     {static} get_room(coordinates: Point): Room
 }
@@ -135,14 +150,14 @@ class PlayerTurnManager {
     skip_to_accuse()
 }
 
-PlayerTurnManager -- TurnPhase
+PlayerTurnManager *-- TurnPhase
 
 enum TurnPhase {
-    <<0>>
-    <<1>>
-    <<2>>
-    <<3>>
-    <<4>>
+    <<START = 0>>
+    <<MOVE = 1>>
+    <<SUGGEST = 2>>
+    <<REFUTE = 3>>
+    <<ACCUSE = 4>>
 }
 
 @enduml
