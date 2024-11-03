@@ -103,15 +103,15 @@ interface Card {
 
 class CharacterCard implements Card {
     dict(): dict
-    get_subject(): Any
+    get_subject(): ClueCharacter
 }
 class WeaponCard implements Card {
     dict(): dict
-    get_subject(): Any
+    get_subject(): Weapon
 }
 class RoomCard implements Card {
     dict(): dict
-    get_subject(): Any
+    get_subject(): Room
 }
 
 CharacterCard "1" o--> "1" ClueCharacter
@@ -150,7 +150,7 @@ class PlayerTurnManager {
     skip_to_accuse()
 }
 
-PlayerTurnManager *-- TurnPhase
+PlayerTurnManager "1" *--> "1" TurnPhase
 
 enum TurnPhase {
     <<START = 0>>
