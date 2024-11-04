@@ -11,69 +11,59 @@ This module contains the Card class and its subclasses:
 Author: Stephen "Christian" Kocsis
 Date: 2024-10-30
 """
+from abc import ABC, abstractmethod
 
-class Card:
-    """Base class for all card types in the game"""
-    
-    def __init__(self, name, description=""):
-        self.name = name # Name of the card
-        self.description = description # Brief description of the card
 
-    def get_info(self):
-        """Return card information."""
-        return f"{self.name}: {self.description}"
-    
+class Card(ABC):
+    def __init__(self, player=None):
+        self.player = player
+
+    @abstractmethod
+    def dict(self):
+        pass
+
+    @abstractmethod
+    def get_subject(self):
+        pass
+
 class CharacterCard(Card):
-    """Represents a character card"""
-        
-    def __init__(self, name, default_location=None, description=""):
-        super().__init__(name, description)
-        self.default_location = default_location  # The character's default location
+    def __init__(self, character):
+        super().__init__()
+        self.character = character
 
-    def set_location(self, new_location):
-        """Set a new default location for the character"""
-        self.default_location = new_location
+    def dict(self):
+        data = {
+            "character_card":  self.character.value
+        }
+        return data
 
-    def get_info(self):
-        """Return character info, including location."""
-        return (
-            f"{self.name} is in "
-            f"{self.default_location if self.default_location else 'unknown location'}."
-        )
+    def get_subject(self):
+        return self.character
 
-class Weapon(Card):
-    """Represents a weapon card"""
+class WeaponCard(Card):
+    def __init__(self, weapon):
+        super().__init__()
+        self.weapon = weapon
 
-    def __init__(self, name, description="", damage_value=0):
-        super().__init__(name, description)
-        self.damage_value = damage_value  # Example attribute for weapon damage
+    def dict(self):
+        data = {
+            "weapon_card":  self.weapon.get_name()
+        }
+        return data
 
-    def set_damage(self, damage_value):
-        """Set the weapon's damage value."""
-        self.damage_value = damage_value
+    def get_subject(self):
+        return self.weapon
 
-    def get_info(self):
-        """Return weapon info, including damage value."""
-        return f"{self.name}: {self.description}. Damage: {self.damage_value}"
+class RoomCard(Card):
+    def __init__(self, room):
+        super().__init__()
+        self.room = room
 
-class Room(Card):
-    """Represents a room card"""
-    
-    def __init__(self, name, description=""):
-        super().__init__(name, description)
-        self.connections = []  # Rooms connected to this room
+    def dict(self):
+        data = {
+            "room_card": self.room.value
+        }
+        return data
 
-    def connect_room(self, room):
-        """Connect this room to another room."""
-        if room not in self.connections:
-            self.connections.append(room)
-
-    def get_connected_rooms(self):
-        """Return the names of connected rooms."""
-        return [room.name for room in self.connections]
-
-    def get_info(self):
-        """Return room info, including connections."""
-        connected_names = ', '.join(self.get_connected_rooms())
-        return f"{self.name}: {self.description}. Connected rooms: {connected_names if connected_names else 'None'}"
-        
+    def get_subject(self):
+        return self.room
