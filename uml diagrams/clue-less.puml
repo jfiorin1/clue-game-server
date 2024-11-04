@@ -17,6 +17,8 @@ class GameManager {
     async send_gamestate_to_client()
     next_phase()
     next_player()
+    save_game_state(filename: String)
+    load_game_state(filename: String)
 }
 
 GameManager "1" o--> "0..*" Player
