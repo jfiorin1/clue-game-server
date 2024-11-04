@@ -128,7 +128,8 @@ WeaponCard "1" o--> "1" Weapon
 class ClueMap {
     <<get>> weapon_map: dict<Weapon, Room>
     <<get>> player_map: List<List<None | Player>>
-    move_weapon(weapon, new_room)
+    move_weapon(weapon: Weapon, new_room: Room)
+    move_player(player: Player, position: Point)
 }
 
 ClueMap "1" o--> "*" Weapon
@@ -151,7 +152,7 @@ enum Room {
 }
 
 class PlayerTurnManager {
-    get_current_phase()
+    get_current_phase(): TurnPhase
     start_turn()
     next_phase()
     skip_to_accuse()
