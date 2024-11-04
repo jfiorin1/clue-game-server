@@ -35,4 +35,13 @@ class ClueMap:
         return self.player_map
 
     def move_weapon(self, weapon, new_room):
-        yield NotImplementedError
+        self.weapon_map[weapon] = new_room
+        weapon.room = new_room
+
+    def move_player(self, player, position):
+        for i in range(0, len(self.player_map)):
+            for j in range(0, len(self.player_map[i])):
+                if self.player_map[i][j] == player:
+                    self.player_map[i][j] = None
+
+        self.player_map[position[0]][position[1]] = player
