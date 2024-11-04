@@ -13,8 +13,8 @@ import os
 from claimsLog import ClaimsLog
 from clueMap import ClueMap
 from weapon import WeaponName, Weapon
-from player import Player  
-from room import Room  
+from player import Player
+from room import Room
 
 class GameManager:
 
@@ -72,13 +72,13 @@ class GameManager:
         if not os.path.exists(filename):
             print(f"No saved game state found at {filename}")
             return
-        
+
         with open(filename, 'r') as file:
             data = json.load(file)
-        
+
         # Reconstruct players
         self.players = [Player(**player_data) for player_data in data.get("players", [])]
-        
+
         # Reconstruct weapons and place them in the correct rooms
         self.weapons = [Weapon(WeaponName[weapon_data["name"]]) for weapon_data in data.get("weapons", [])]
         for weapon, weapon_data in zip(self.weapons, data.get("weapons", [])):
@@ -92,8 +92,9 @@ class GameManager:
             # Assuming claims are stored as dicts and can be re-constructed here
             # Modify as necessary if ClaimsLog has specific add_claim requirements
             self.claims_log.add_claim(claim_data)
-        
+
         # Restore the current turn index
         self.index = data.get("current_turn", 0)
-        
+
         print(f"Game state loaded from {filename}")
+
