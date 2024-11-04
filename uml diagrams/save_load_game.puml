@@ -1,0 +1,24 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+|Player Ю|
+start
+:save game from UI;
+|#AntiqueWhite|Player|
+:save game request;
+|GameManager|
+:get game state;
+|#AntiqueWhite|Json Database Ю|
+:save to json file;
+|Player Ю|
+:load game from UI;
+|Player|
+:load game request;
+|#AntiqueWhite|Json Database Ю|
+:send game state back;
+|GameManager|
+:recieve game state;
+:deserialize;
+stop
+
+@enduml

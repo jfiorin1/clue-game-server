@@ -1,0 +1,42 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+|Player Ю|
+start
+:start new game;
+|#AntiqueWhite|GameManager|
+:create game objects;
+fork
+|Player|
+:initialize players;
+|Player|
+fork again
+|#AntiqueWhite|Card|
+|Weapon|
+:initialize weapons;
+fork again
+|#AntiqueWhite|ClueMap|
+:initialize map;
+|Room|
+:get room positions;
+|ClueMap|
+fork end
+:recieve game objects;
+fork
+:save players to map;
+fork again
+:save weapons to map;
+fork end
+|GameManager|
+:create all cards;
+|Card|
+:initialize cards;
+|Player|
+partition for each {
+    :draw three cards;
+}
+|GameManager|
+:ready to play;
+stop
+
+@enduml
