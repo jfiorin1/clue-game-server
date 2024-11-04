@@ -8,9 +8,11 @@ This module contains the Claim class and its subclasses:
 - Accusation: Represents an accusation made by a player
 
 Author: Stephen "Christian" Kocsis
-Date: 2024-10-19
+Date: 2024-10-30
 """
 from abc import ABC, abstractmethod
+
+from datetime import datetime
 
 class Claim(ABC):
 
@@ -19,6 +21,7 @@ class Claim(ABC):
         self.character = character
         self.weapon = weapon
         self.room = room
+        self.timestamp = datetime.now()
 
     @abstractmethod
     def make_string(self):
@@ -26,6 +29,14 @@ class Claim(ABC):
 
     @abstractmethod
     def dict(self):
+        pass
+      
+    @abstractmethod
+    def get_info(self):
+        pass
+      
+    @abstractmethod
+    def validate(self):
         pass
 
 class Suggestion(Claim):
