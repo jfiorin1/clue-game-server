@@ -2,6 +2,7 @@
 'https://plantuml.com/class-diagram
 
 class main {
+    <<Global variable gameManager: GameManager>>
     async handler(websocket: Websocket)
     async main()
 }
@@ -26,9 +27,6 @@ GameManager "1" *--> "1" ClueMap
 
 note "Point is an alias for (Int, Int)" as n
 note "<<get/set>> indicates the presence of a getter/setter class for a specific variable" as n2
-note "Global variable gameManager: GameManager" as g
-
-GameManager -[dashed]- g: instance of
 
 class Player {
     <<get/set>> name: string
@@ -135,7 +133,7 @@ class ClueMap {
 ClueMap "1" o--> "*" Weapon
 ClueMap "1" o--> "*" Player
 ClueMap "1" --> "*" Room: refers to collection of
-ClueMap --> g: accesses
+ClueMap "1" --> "1" main: accesses gameManager
 
 enum Room {
     <<STUDY = "Study">>
