@@ -2,7 +2,7 @@
 'https://plantuml.com/class-diagram
 
 class main {
-    <<Global variable gameManager: GameManager>>
+    <<Global>> gameManager: GameManager
     async handler(websocket: Websocket)
     async main()
 }
@@ -24,8 +24,9 @@ GameManager "1" o--> "*" Weapon
 GameManager "1" --> "*" WeaponName: refers to collection of
 GameManager "1" *--> "1" ClaimsLog
 GameManager "1" *--> "1" ClueMap
+GameManager "1" *--> Game
 
-note "Point is an alias for (Int, Int)" as n
+note "Point is an alias for (Int, Int)\nWebsocket is an alias for websockets.asyncio.server.ServerConnection" as n
 note "<<get/set>> indicates the presence of a getter/setter class for a specific variable" as n2
 
 class Player {
@@ -164,6 +165,42 @@ enum TurnPhase {
     <<SUGGEST = 2>>
     <<REFUTE = 3>>
     <<ACCUSE = 4>>
+}
+
+class Game {
+    current_player_index: Int
+    game_over: Bool
+    screen: PyGame.screen
+    font: PyGame.font
+    setup_game()
+    deal_cards()
+    load_game()
+    save_game()
+    reset_game()
+    view_history()
+    initialize_players(num_ai_players: Int)
+    start_game()
+    play_game()
+    handle_turn()
+    ai_turn()
+    make_suggestion(player: Player)
+    handle_suggestion(suggestion: Suggestion)
+    make_accusation(player: Player)
+    next_turn()
+}
+
+Game --> Card: refers to
+Game --> Suggestion: initializes
+Game --> Accuse: initializes
+Game --> Player: refers to
+Game --> Move: initializes
+
+class Move {
+    start_location: Point
+    end_location: Point
+    validate_move(): Bool
+    execute_move()
+    log_move()
 }
 
 @enduml
