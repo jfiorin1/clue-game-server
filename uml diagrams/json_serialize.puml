@@ -1,0 +1,34 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+|main.py|
+start
+:main;
+:handle websocket;
+|#AntiqueWhite|GameManager|
+:set websocket variable;
+:get gamestate to send to client;
+:create json string;
+fork
+|Player|
+partition for each {
+    :get dictionary;
+}
+fork again
+|#AntiqueWhite|Weapon|
+partition for each {
+    :get dictionary;
+}
+fork again
+|ClaimsLog|
+:get array of dictionaries;
+|Claim|
+partition for each {
+    :get dictionary;
+}
+|GameManager|
+end fork
+:json dump;
+:send to websocket;
+stop
+
+@enduml
