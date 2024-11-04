@@ -8,11 +8,13 @@ Author: Nick Weiner
 Date: 2024-10-20
 """
 import json
+import os
 
 from claimsLog import ClaimsLog
 from clueMap import ClueMap
 from weapon import WeaponName, Weapon
-
+from player import Player
+from room import Room
 
 class GameManager:
 
@@ -40,7 +42,6 @@ class GameManager:
             "weapons": [weapon.dict() for weapon in self.weapons],
             "claims": self.claims_log.array_of_claims_dicts()
         }
-
         return json.dumps(data)
 
     async def send_gamestate_to_client(self):
@@ -52,3 +53,48 @@ class GameManager:
     def next_player(self):
         index = (self.index + 1) % len(self.players)
         self.players[index].turn.start_turn()
+
+    # New methods for saving and loading game state
+    def save_game_state(self, filename="game_state.json"):
+        """Saves the current game state to a JSON file."""
+        data = {
+            "players": [player.dict() for player in self.players],
+            "weapons": [weapon.dict() for weapon in self.weapons],
+            "claims": self.claims_log.array_of_claims_dicts(),
+            "current_turn": self.index
+        }
+        with open(filename, 'w') as file:
+            json.dump(data, file)
+        print(f"Game state saved to {filename}")
+
+    def load_game_state(self, filename="game_state.json"):
+        """Loads the game state from a JSON file."""
+        if not os.path.exists(filename):
+            print(f"No saved game state found at {filename}")
+            return
+
+        with open(filename, 'r') as file:
+            data = json.load(file)
+
+        # Reconstruct players
+        self.players = [Player(**player_data) for player_data in data.get("players", [])]
+
+        # Reconstruct weapons and place them in the correct rooms
+        self.weapons = [Weapon(WeaponName[weapon_data["name"]]) for weapon_data in data.get("weapons", [])]
+        for weapon, weapon_data in zip(self.weapons, data.get("weapons", [])):
+            room_coordinates = weapon_data.get("room")
+            if room_coordinates:
+                weapon.set_room(Room.get_room(tuple(room_coordinates)))
+
+        # Load the claims log
+        self.claims_log = ClaimsLog()
+        for claim_data in data.get("claims", []):
+            # Assuming claims are stored as dicts and can be re-constructed here
+            # Modify as necessary if ClaimsLog has specific add_claim requirements
+            self.claims_log.add_claim(claim_data)
+
+        # Restore the current turn index
+        self.index = data.get("current_turn", 0)
+
+        print(f"Game state loaded from {filename}")
+
