@@ -1,0 +1,24 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+|GameManager|
+start
+:deserialize data from json string;
+fork
+|#AntiqueWhite|Player|
+:create new player objects;
+fork again
+|Weapon|
+:create new weapon objects;
+fork again
+|#AntiqueWhite|ClaimsLog|
+:make claims log match with database;
+|Claim|
+:create new claim objects;
+|GameManager|
+end fork
+:ready to play;
+
+stop
+
+@enduml

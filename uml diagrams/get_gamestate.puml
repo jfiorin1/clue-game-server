@@ -1,0 +1,30 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+|GameManager|
+start
+:create json string;
+fork
+|#AntiqueWhite|Player|
+partition for each {
+    :get dictionary;
+}
+fork again
+|Weapon|
+partition for each {
+    :get dictionary;
+}
+fork again
+|#AntiqueWhite|ClaimsLog|
+:get array of dictionaries;
+|Claim|
+partition for each {
+    :get dictionary;
+}
+|GameManager|
+end fork
+:json dump;
+
+stop
+
+@enduml
