@@ -1,0 +1,60 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:start turn;
+:player chooses to move or accuse;
+if (accuse button pressed) then (skip to accuse)
+else (move)
+    :select destination space;
+    :advance TurnPhase to <<MOVE>>;
+    :initiate move to desired space;
+    partition ClueMap {
+        :update player position;
+        :update map of players;
+    }
+    :advance player TurnPhase to <<SUGGEST>>;
+    if (accuse button pressed) then (skip to accuse)
+    else (suggest)
+        :select character;
+        :select weapon;
+        :select room;
+        fork
+        :selected character is moved to room;
+        fork again
+        :selected weapon is moved to room;
+        fork end
+        :add suggestion to log;
+        :advance player TurnPhase to <<REFUTE>>;
+        :iterate through players to find contrary evidence;
+        if (contrary evidence is provided) then (true)
+            :add refutation to log;
+        else (false)
+        end if
+endif
+    endif
+    if (player has pressed accuse button or chose to accuse at end of turn) then (accuse)
+    :advance TurnPhase to <<ACCUSE>>;
+    :select character;
+    :select weapon;
+    :select room;
+    fork
+    :selected character is moved to room;
+    fork again
+    :selected weapon is moved to room;
+    fork end
+    :add accusation to log;
+    if (accusation was) then (right)
+    :the player wins;
+    :the game is over;
+    stop
+    else (wrong)
+        :the player loses;
+        :the player is removed from turn order;
+    endif
+endif
+:next player's turn;
+
+stop
+
+@enduml
