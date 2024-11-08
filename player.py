@@ -26,6 +26,9 @@ class Player:
     def __str__(self):
         return self.name + " : " + self.character.name
 
+    def get_name(self):
+        return self.name
+
     def set_position(self, x, y):
         self.position = (x, y)
 
@@ -43,7 +46,7 @@ class Player:
     def add_note(self, note):
         self.notes += note
 
-    def _get_cards_string(self):
+    def _get_cards_dict(self):
         return [card.dict() for card in self.cards]
 
     def dict(self):
@@ -54,7 +57,7 @@ class Player:
                 "x": self.position[0],
                 "y": self.position[1]
             },
-            "cards": self._get_cards_string(), # could be a future issue, not sure how nesting dumps works
+            "cards": self._get_cards_dict(),
             "notes": self.notes,
             "is_active": self.is_active
         }

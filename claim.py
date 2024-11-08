@@ -16,10 +16,10 @@ from datetime import datetime
 
 class Claim(ABC):
 
-    def __init__(self, player, character, weapon, room):
+    def __init__(self, player, character, weaponName, room):
         self.player = player
         self.character = character
-        self.weapon = weapon
+        self.weaponName = weaponName
         self.room = room
         self.timestamp = datetime.now()
 
@@ -41,30 +41,30 @@ class Claim(ABC):
 
 class Suggestion(Claim):
     def make_string(self):
-        return f"I suggest it was {self.character.value} with the {self.weapon.get_name()} in the {self.room.value}"
+        return f"I suggest it was {self.character.value} with the {self.weaponName.value} in the {self.room.value}"
 
     def dict(self):
         data = {
             "suggestion": {
-                "player": self.player,
+                "player": self.player.get_name(),
                 "character": self.character.name,
-                "weapon": self.weapon.get_name_enum().name,
+                "weapon": self.weaponName.value,
                 "room": self.room.name
             }
         }
 
         return data
 
-class Accuse(Claim):
+class Accusation(Claim):
     def make_string(self):
-        return f"I accuse {self.character.value} with the {self.weapon.get_name()} in the {self.room.value}"
+        return f"I accuse {self.character.value} with the {self.weaponName.value} in the {self.room.value}"
 
     def dict(self):
         data = {
             "accusation": {
-                "player": self.player,
+                "player": self.player.get_name(),
                 "character": self.character.name,
-                "weapon": self.weapon.get_name_enum().name,
+                "weapon": self.weaponName.value,
                 "room": self.room.name
             }
         }

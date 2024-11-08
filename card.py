@@ -12,6 +12,7 @@ Author: Stephen "Christian" Kocsis
 Date: 2024-10-30
 """
 from abc import ABC, abstractmethod
+import json
 
 
 class Card(ABC):
@@ -20,6 +21,10 @@ class Card(ABC):
 
     @abstractmethod
     def dict(self):
+        pass
+
+    @abstractmethod
+    def deserialize(self, jstring):
         pass
 
     @abstractmethod
@@ -41,18 +46,18 @@ class CharacterCard(Card):
         return self.character
 
 class WeaponCard(Card):
-    def __init__(self, weapon):
+    def __init__(self, weaponName):
         super().__init__()
-        self.weapon = weapon
+        self.weaponName = weaponName
 
     def dict(self):
         data = {
-            "weapon_card":  self.weapon.get_name()
+            "weapon_card":  self.weaponName.value
         }
         return data
 
     def get_subject(self):
-        return self.weapon
+        return self.weaponName
 
 class RoomCard(Card):
     def __init__(self, room):

@@ -1,7 +1,7 @@
 import json
 import unittest
 
-from claim import Suggestion, Accuse
+from claim import Suggestion, Accusation
 from claimsLog import ClaimsLog
 from player import ClueCharacter
 from room import Room
@@ -21,7 +21,7 @@ class MyTestCase(unittest.TestCase):
         room = Room.CONSERVATORY
 
         suggestion = Suggestion(character, weapon, room)
-        accuse = Accuse(character, weapon, room)
+        accuse = Accusation(character, weapon, room)
 
         self.log.add_claim(suggestion)
         self.log.add_claim(accuse)

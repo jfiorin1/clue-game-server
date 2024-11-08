@@ -37,7 +37,7 @@ class MyTestCase(unittest.TestCase):
         self.player.set_position(1, 1)
 
         card1 = CharacterCard(ClueCharacter.MISS_SCARLETT)
-        card2 = WeaponCard(Weapon(WeaponName.ROPE, Room.HALL))
+        card2 = WeaponCard(WeaponName.ROPE)
         card3 = RoomCard(Room.BALLROOM)
 
         self.player.add_cards([card1, card2, card3])
