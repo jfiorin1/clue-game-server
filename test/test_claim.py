@@ -1,7 +1,7 @@
 import unittest
 import json
 
-from claim import Suggestion, Accuse
+from claim import Suggestion, Accusation
 from player import ClueCharacter
 from weapon import Weapon, WeaponName
 from room import Room
@@ -22,11 +22,11 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(json.dumps(suggestion.dict()), """{"suggestion": {"character": "MISS_SCARLETT", "weapon": "ROPE", "room": "BILLIARD"}}""")
 
     def test_init_accusation(self):
-        accusation = Accuse(self.character, self.weapon, self.room)
+        accusation = Accusation(self.character, self.weapon, self.room)
         self.assertEqual(accusation.make_string(), "I accuse Miss Scarlett with the Rope in the Billiard Room")
 
     def test_accusation_json(self):
-        accusation = Accuse(self.character, self.weapon, self.room)
+        accusation = Accusation(self.character, self.weapon, self.room)
         self.assertEqual(json.dumps(accusation.dict()), """{"accusation": {"character": "MISS_SCARLETT", "weapon": "ROPE", "room": "BILLIARD"}}""")
 
 

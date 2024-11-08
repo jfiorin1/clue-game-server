@@ -12,8 +12,9 @@ import os
 
 from claimsLog import ClaimsLog
 from clueMap import ClueMap
+from deserializer import Deserializer
 from weapon import WeaponName, Weapon
-from player import Player
+from player import Player, ClueCharacter
 from room import Room
 
 class GameManager:
@@ -26,6 +27,7 @@ class GameManager:
         self.weapons = []
         self.websocket = None
         self.clue_map = ClueMap()
+        self.deserializer = Deserializer(self)
 
         for name in WeaponName:
             weapon = Weapon(name)
@@ -43,6 +45,22 @@ class GameManager:
             "claims": self.claims_log.array_of_claims_dicts()
         }
         return json.dumps(data)
+
+    def json_deserialize(self, jsonstirng):
+        self.deserializer.deserialize_game(jsonstirng)
+
+    def set_objects(self, players, weapons, claims_log):
+        self.players = players
+        self.weapons = weapons
+        self.claims_log = claims_log
+        self.clue_map = ClueMap()
+
+    def get_player(self, name):
+        for player in self.players:
+            if player.name == name:
+                return player
+
+        return None
 
     async def send_gamestate_to_client(self):
         await self.websocket.send(self.json_serialize())

@@ -21,13 +21,12 @@ class MyTestCase(unittest.TestCase):
 
     def test_weapon_card(self):
         for name in WeaponName:
-            weapon = Weapon(name)
-            card = WeaponCard(weapon)
+            card = WeaponCard(name)
             self.assertIsInstance(card, WeaponCard)
             self.assertIn(card.get_subject().get_name_enum(), WeaponName)
 
     def test_wc_json_serialization(self):
-        card = WeaponCard(Weapon(WeaponName.ROPE))
+        card = WeaponCard(WeaponName.ROPE)
         json_string = json.dumps(card.dict())
         self.assertEqual(json_string, """{"weapon_card": "Rope"}""")
 
