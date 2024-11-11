@@ -81,10 +81,6 @@ class GameManager:
         player = self.get_player(name)
         player.set_position(x, y)
 
-    def advance_player_turn(self, name):
-        player = self.get_player(name)
-        player.get_turn_manager().next_phase()
-
     def skip_to_accuse(self, name):
         player = self.get_player(name)
         player.get_turn_manager().skip_to_accuse()
