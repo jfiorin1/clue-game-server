@@ -35,6 +35,9 @@ class Player:
     def get_position(self):
         return self.characterHandler.position
 
+    def get_turn_manager(self):
+        return self.turn
+
     def add_cards(self, cards):
         for card in cards:
             card.player = self

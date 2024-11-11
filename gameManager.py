@@ -51,6 +51,12 @@ class GameManager:
             self.weapons.append(weapon)
         self.claims_log = ClaimsLog()
 
+        rand_character = random.choice([c for c in ClueCharacter])
+        rand_weapon = random.choice([w for w in WeaponName])
+        rand_room = random.choice([r for r in Room])
+
+        set_murder = (rand_character, rand_weapon, rand_room)
+
     def get_all_cards(self):
         cards = []
         for character in ClueCharacter:
@@ -67,6 +73,24 @@ class GameManager:
 
         random.shuffle(cards)
         return cards
+
+    def add_player(self, player):
+        self.players.append(player)
+
+    def move_player(self, player, x, y):
+        pass
+
+    def advance_player_turn(self, player):
+        player.get_turn_manager().next_phase()
+
+    def skip_to_accuse(self, player):
+        player.get_turn_manager().skip_to_accuse()
+
+    def make_claim(self, is_accuse, player, character, weapon, room):
+        pass
+
+    def next_player(self):
+        self.index = (self.index + 1) % len(self.players)
 
     def reset(self, players=None):
         self.new_game(players)
@@ -93,9 +117,6 @@ class GameManager:
         self.weapons = weapons
         self.claims_log = claims_log
         self.clue_map = ClueMap()
-
-    def add_player(self, player):
-        self.players.append(player)
 
     def get_player(self, name):
         for player in self.players:

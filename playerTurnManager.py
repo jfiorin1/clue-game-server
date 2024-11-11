@@ -17,14 +17,13 @@ class PlayerTurnManager:
         return self.phase
 
     def start_turn(self):
-        raise NotImplementedError()
+        self.phase = TurnPhase.START
 
     def next_phase(self):
-        raise NotImplementedError()
+        self.phase = TurnPhase(self.phase.value + 1)
 
     def skip_to_accuse(self):
         self.phase = TurnPhase.ACCUSE
-        raise NotImplementedError()
 
 class TurnPhase(Enum):
     START = 0
