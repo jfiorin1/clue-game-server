@@ -14,10 +14,11 @@ import random
 from card import CharacterCard, WeaponCard, RoomCard
 from claimsLog import ClaimsLog
 from clueMap import ClueMap
-from deserializer import Deserializer
 from weapon import WeaponName, Weapon
 from player import Player, ClueCharacter
 from room import Room
+from deserializer import Deserializer
+
 
 class GameManager:
 
@@ -41,7 +42,7 @@ class GameManager:
         self.index = 0
         self.weapons = []
         self.websocket = None
-        self.clue_map = ClueMap()
+        self.clue_map = ClueMap(self)
         self.deserializer = Deserializer(self)
         self.murder = None
         self.deck = self.get_all_cards()

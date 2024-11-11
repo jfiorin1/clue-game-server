@@ -14,6 +14,8 @@ start
 :load game from UI;
 |Player|
 :load game request;
+|GameManager|
+:execute load game;
 |#AntiqueWhite|Json Database Ю|
 :send game state back;
 |GameManager|
