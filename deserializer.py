@@ -59,7 +59,7 @@ class Deserializer():
     def deserialize_players(self, data):
         players = []
         for player in data['players']:
-            p = Player(player["name"], ClueCharacter(player["character"]))
+            p = Player(player["name"], ClueCharacter(player["character"]), self.gameManager)
             p.set_position(player["position"]["x"], player["position"]["y"])
 
             cards = self.deserialize_cards(player)

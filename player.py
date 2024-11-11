@@ -13,10 +13,12 @@ from playerTurnManager import PlayerTurnManager
 from claim import Suggestion, Accusation
 
 class Player:
-    def __init__(self, name, character):
+    def __init__(self, name, character, gameManager):
         self.name = name
         self.characterHandler = CharacterHandler(character)
         self.turn = PlayerTurnManager()
+
+        self.gameManager = gameManager
 
         self.cards = []
         self.notes = ""
@@ -75,11 +77,11 @@ class Player:
 
     def make_suggestion(self, character, weaponName, room):
         suggestion = Suggestion(self, character, weaponName, room)
-        game_manager.claims_log.add_claim(suggestion)
+        self.gameManager.claims_log.add_claim(suggestion)
 
     def make_accusation(self, character, weaponName, room):
         accusation = Accusation(self, character, weaponName, room)
-        game_manager.claims_log.add_claim(accusation)
+        self.gameManager.claims_log.add_claim(accusation)
 
 class CharacterHandler:
     def __init__(self, character):

@@ -12,7 +12,7 @@ import os
 import random
 
 from card import CharacterCard, WeaponCard, RoomCard
-from claim import Claim, Accusation, Suggestion
+from claim import Accusation, Suggestion
 from claimsLog import ClaimsLog
 from clueMap import ClueMap
 from weapon import WeaponName, Weapon
@@ -52,11 +52,7 @@ class GameManager:
             self.weapons.append(weapon)
         self.claims_log = ClaimsLog()
 
-        rand_character = random.choice([c for c in ClueCharacter])
-        rand_weapon = random.choice([w for w in WeaponName])
-        rand_room = random.choice([r for r in Room])
-
-        self.set_murder(rand_character, rand_weapon, rand_room)
+        self.setup_game()
 
     def get_all_cards(self):
         cards = []
@@ -75,10 +71,10 @@ class GameManager:
         random.shuffle(cards)
         return cards
 
-    # client initiated funtions
+    # client initiated functions
 
     def add_player(self, name, character):
-        player = Player(name, ClueCharacter(character))
+        player = Player(name, ClueCharacter(character), self)
         self.players.append(player)
 
     def move_player(self, name, x, y):
@@ -152,56 +148,12 @@ class GameManager:
     def next_phase(self):
         self.players[self.index].turn.next_phase()
 
-    def next_player(self):
-        index = (self.index + 1) % len(self.players)
-        self.players[index].turn.start_turn()
-
     # New methods for saving and loading game state
     def save_game_state(self, filename="game_state.json"):
-        """Saves the current game state to a JSON file."""
-        data = {
-            "players": [player.dict() for player in self.players],
-            "weapons": [weapon.dict() for weapon in self.weapons],
-            "claims": self.claims_log.array_of_claims_dicts(),
-            "current_turn": self.index
-        }
-        with open(filename, 'w') as file:
-            json.dump(data, file)
-        print(f"Game state saved to {filename}")
+        pass
 
     def load_game_state(self, filename="game_state.json"):
-        """Loads the game state from a JSON file."""
-        if not os.path.exists(filename):
-            print(f"No saved game state found at {filename}")
-            return
-
-        with open(filename, 'r') as file:
-            data = json.load(file)
-
-        # Reconstruct players
-        self.players = [Player(**player_data) for player_data in data.get("players", [])]
-
-        # Reconstruct weapons and place them in the correct rooms
-        self.weapons = [Weapon(WeaponName[weapon_data["name"]]) for weapon_data in data.get("weapons", [])]
-        for weapon, weapon_data in zip(self.weapons, data.get("weapons", [])):
-            room_coordinates = weapon_data.get("room")
-            if room_coordinates:
-                weapon.set_room(Room.get_room(tuple(room_coordinates)))
-
-        # Load the claims log
-        self.claims_log = ClaimsLog()
-        for claim_data in data.get("claims", []):
-            # Assuming claims are stored as dicts and can be re-constructed here
-            # Modify as necessary if ClaimsLog has specific add_claim requirements
-            self.claims_log.add_claim(claim_data)
-
-        # Restore the current turn index
-        self.index = data.get("current_turn", 0)
-
-        print(f"Game state loaded from {filename}")
-
-    def add_player(self, name, character):
-        self.player_dict[name] = character
+        pass
 
     def setup_game(self):
         """Set up the game components."""
@@ -211,15 +163,15 @@ class GameManager:
         rand_weapon = random.choice([w for w in WeaponName])
         rand_room = random.choice([r for r in Room])
 
-        self.gameManager.set_murder(rand_char, rand_weapon, rand_room)
+        self.set_murder(rand_char, rand_weapon, rand_room)
 
         self.deal_cards()  # Deal cards to players after setup
 
     def deal_cards(self):
         """Distribute cards among players."""
-        for player in self.gameManager.players:
+        for player in self.players:
             cards = []
             for i in range(3):
-                cards.append(game_manager.draw())
+                cards.append(self.draw())
             player.add_cards(cards)
 
