@@ -9,7 +9,9 @@ Date: 2024-10-20
 """
 import json
 import os
+import random
 
+from card import CharacterCard, WeaponCard, RoomCard
 from claimsLog import ClaimsLog
 from clueMap import ClueMap
 from deserializer import Deserializer
@@ -20,6 +22,19 @@ from room import Room
 class GameManager:
 
     def __init__(self, players=None):
+        self.players = None
+        self.index = 0
+        self.weapons = []
+        self.websocket = None
+        self.clue_map = None
+        self.deserializer = None
+        self.murder = None
+        self.deck = []
+        self.claims_log = None
+
+        self.new_game(players)
+
+    def new_game(self, players):
         if players is None:
             players = []
         self.players = players
@@ -28,12 +43,35 @@ class GameManager:
         self.websocket = None
         self.clue_map = ClueMap()
         self.deserializer = Deserializer(self)
-
+        self.murder = None
+        self.deck = self.get_all_cards()
         for name in WeaponName:
             weapon = Weapon(name)
             self.weapons.append(weapon)
-
         self.claims_log = ClaimsLog()
+
+    def get_all_cards(self):
+        cards = []
+        for character in ClueCharacter:
+            char_card = CharacterCard(character)
+            cards.append(char_card)
+
+        for weapon in WeaponName:
+            weapon_card = WeaponCard(weapon)
+            cards.append(weapon_card)
+
+        for room in Room:
+            room_card = RoomCard(room)
+            cards.append(room_card)
+
+        random.shuffle(cards)
+        return cards
+
+    def reset(self, players=None):
+        self.new_game(players)
+
+    def draw(self):
+        return self.deck.pop()
 
     def set_websocket(self, websocket):
         self.websocket = websocket
@@ -55,12 +93,21 @@ class GameManager:
         self.claims_log = claims_log
         self.clue_map = ClueMap()
 
+    def add_player(self, player):
+        self.players.append(player)
+
     def get_player(self, name):
         for player in self.players:
             if player.name == name:
                 return player
 
         return None
+
+    def get_claims_log(self):
+        return self.claims_log.get_log()
+
+    def set_murder(self, character, weapon, room):
+        self.murder = (character, weapon, room)
 
     async def send_gamestate_to_client(self):
         await self.websocket.send(self.json_serialize())

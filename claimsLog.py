@@ -16,6 +16,8 @@ class ClaimsLog:
     def add_claim(self, claim):
         self.log.append(claim)
 
+    def get_log(self):
+        return self.log
+
     def array_of_claims_dicts(self):
         return [log.dict() for log in self.log]
-            
