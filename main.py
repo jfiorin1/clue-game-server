@@ -6,7 +6,6 @@ from gameManager import GameManager
 
 game_manager = GameManager()
 
-
 # this will recieve a message and print to the console
 async def handler(websocket):
     game_manager.set_websocket(websocket)

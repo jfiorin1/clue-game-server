@@ -12,8 +12,6 @@ import json
 from card import CharacterCard, WeaponCard, RoomCard
 from claim import Accusation, Suggestion
 from claimsLog import ClaimsLog
-from gameManager import GameManager
-from main import game_manager
 from weapon import WeaponName, Weapon
 from player import Player, ClueCharacter
 from room import Room
