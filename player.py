@@ -9,7 +9,6 @@ Date: 2024-10-19
 
 from enum import Enum
 
-from main import game_manager
 from playerTurnManager import PlayerTurnManager
 from claim import Suggestion, Accusation
 

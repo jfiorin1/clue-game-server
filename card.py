@@ -42,6 +42,10 @@ class CharacterCard(Card):
         }
         return data
 
+    def deserialize(self, jstring):
+        data = json.loads(jstring)
+        self.character.value = data["character_card"]
+
     def get_subject(self):
         return self.character
 
@@ -56,6 +60,10 @@ class WeaponCard(Card):
         }
         return data
 
+    def deserialize(self, jstring):
+        data = json.loads(jstring)
+        self.weaponName.value = data["weapon_card"]
+
     def get_subject(self):
         return self.weaponName
 
@@ -69,6 +77,10 @@ class RoomCard(Card):
             "room_card": self.room.value
         }
         return data
+
+    def deserialize(self, jstring):
+        data = json.loads(jstring)
+        self.room.value = data["room_card"]
 
     def get_subject(self):
         return self.room

@@ -164,3 +164,26 @@ class GameManager:
 
         print(f"Game state loaded from {filename}")
 
+    def add_player(self, name, character):
+        self.player_dict[name] = character
+
+    def setup_game(self):
+        """Set up the game components."""
+
+        # Randomly select murderer, weapon, and room for the crime
+        rand_char = random.choice([c for c in ClueCharacter])
+        rand_weapon = random.choice([w for w in WeaponName])
+        rand_room = random.choice([r for r in Room])
+
+        self.gameManager.set_murder(rand_char, rand_weapon, rand_room)
+
+        self.deal_cards()  # Deal cards to players after setup
+
+    def deal_cards(self):
+        """Distribute cards among players."""
+        for player in self.gameManager.players:
+            cards = []
+            for i in range(3):
+                cards.append(game_manager.draw())
+            player.add_cards(cards)
+
