@@ -163,6 +163,8 @@ class GameManager:
         rand_weapon = random.choice([w for w in WeaponName])
         rand_room = random.choice([r for r in Room])
 
+        self.deck = [c for c in self.deck if c.get_subject() not in [rand_char, rand_room, rand_room]]
+
         self.set_murder(rand_char, rand_weapon, rand_room)
 
         self.deal_cards()  # Deal cards to players after setup
