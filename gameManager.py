@@ -55,7 +55,7 @@ class GameManager:
         rand_weapon = random.choice([w for w in WeaponName])
         rand_room = random.choice([r for r in Room])
 
-        set_murder = (rand_character, rand_weapon, rand_room)
+        self.set_murder(rand_character, rand_weapon, rand_room)
 
     def get_all_cards(self):
         cards = []
