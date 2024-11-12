@@ -4,7 +4,7 @@ GameManager Module
 
 This module contains the GameManager class and its associated functions:
 
-Author: Nick Weiner
+Author: Nick Weiner & Christopher Pohl
 Date: 2024-10-20
 """
 import json
@@ -35,6 +35,42 @@ class GameManager:
         self.claims_log = None
 
         self.new_game(players)
+
+    def parse_message(self, message):
+        message_type = message["message_type"]
+        player_name = message["player_name"]
+        match message_type:
+            case "player_join":
+                # Minimal Version
+                if len(self.players) == 0:
+                    self.add_player(player_name, "Colonel Mustard")
+                elif len(self.players) == 1:
+                    self.add_player(player_name, "Professor Plum")
+                elif len(self.players) == 2:
+                    self.add_player(player_name, "Miss Scarlett")
+                else:
+                    self.websocket.send("TOO MANY PLAYERS GET OUT")
+
+            # Player move
+            case "player_move":
+                x = message["x_coord"]
+                y = message["y_coord"]
+                self.move_player(player_name, x, y)
+
+            # Accuse other player
+            case "skip_to_accuse":
+                self.skip_to_accuse(player_name)
+
+            # Make a claim
+            case "make_claim":
+                is_accused = message["is_accused"]
+                character = message["character"]
+                weapon = message["weapon"]
+                room = message["room"]
+                self.make_claim(is_accused, player_name, character, weapon, room)
+
+            case _:
+                print("Unknown message type")
 
     def new_game(self, players):
         if players is None:
@@ -170,4 +206,3 @@ class GameManager:
             for i in range(3):
                 cards.append(self.draw())
             player.add_cards(cards)
-
