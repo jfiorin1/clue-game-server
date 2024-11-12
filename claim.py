@@ -7,7 +7,7 @@ This module contains the Claim class and its subclasses:
 - Suggestion: Represents a suggestion made by a player
 - Accusation: Represents an accusation made by a player
 
-Author: Stephen "Christian" Kocsis
+Author: Nick Weiner & Stephen "Christian" Kocsis
 Date: 2024-10-30
 """
 from abc import ABC, abstractmethod

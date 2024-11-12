@@ -15,6 +15,8 @@ async def handler(websocket):
     async for message in websocket:
         # handle message appropriately and update game state
         print(message)
+        game_manager.parse_message(message)
+        await game_manager.send_gamestate_to_client()
 
 
 # start server to run forever
@@ -22,14 +24,14 @@ async def main():
 
 
     async with serve(handler, "", 3000):
-        dummy = {
-            "message_type": "player_join",
-            "player_name": "xxXXSniperYoMama420Xxx"
-        }
-        game_manager.parse_message(dummy)
-        game_manager.parse_message(dummy)
-        game_manager.parse_message(dummy)
-        [print(player.characterHandler.character.value) for player in game_manager.players]
+        # dummy = {
+        #     "message_type": "player_join",
+        #     "player_name": "xxXXSniperYoMama420Xxx"
+        # }
+        # game_manager.parse_message(dummy)
+        # game_manager.parse_message(dummy)
+        # game_manager.parse_message(dummy)
+        # [print(player.characterHandler.character.value) for player in game_manager.players]
         await asyncio.get_running_loop().create_future()
 
 
