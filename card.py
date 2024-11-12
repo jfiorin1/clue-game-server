@@ -8,7 +8,7 @@ This module contains the Card class and its subclasses:
 - Weapon: Represents a weapon in the game
 - Room: Represents a room in the game
 
-Author: Stephen "Christian" Kocsis
+Author: Nick Weiner & Stephen "Christian" Kocsis
 Date: 2024-10-30
 """
 from abc import ABC, abstractmethod

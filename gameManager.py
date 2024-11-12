@@ -10,6 +10,7 @@ Date: 2024-10-20
 import json
 import os
 import random
+from operator import index
 
 from card import CharacterCard, WeaponCard, RoomCard
 from claim import Accusation, Suggestion
@@ -118,25 +119,19 @@ class GameManager:
         player = self.get_player(name)
         player.set_position(x, y)
 
-    def advance_player_turn(self, name):
-        player = self.get_player(name)
-        player.get_turn_manager().next_phase()
-
     def skip_to_accuse(self, name):
         player = self.get_player(name)
         player.get_turn_manager().skip_to_accuse()
 
-    def make_claim(self, is_accuse, player, character, weapon, room):
+    def make_claim(self, is_accuse, name, character, weapon, room):
         claim = None
+        player = self.get_player(name)
         if is_accuse:
-            claim = Accusation(player, character, weapon, room)
+            claim = Accusation(player, ClueCharacter(character), WeaponName(weapon), Room(room))
         else:
-            claim = Suggestion(player, character, weapon, room)
+            claim = Suggestion(player, ClueCharacter(character), WeaponName(weapon), Room(room))
 
         self.claims_log.add_claim(claim)
-
-    def next_player(self):
-        self.index = (self.index + 1) % len(self.players)
 
     def reset(self, players=None):
         self.new_game(players)
@@ -153,7 +148,8 @@ class GameManager:
         data = {
             "players": [player.dict() for player in self.players],
             "weapons": [weapon.dict() for weapon in self.weapons],
-            "claims": self.claims_log.array_of_claims_dicts()
+            "claims": self.claims_log.array_of_claims_dicts(),
+            "player_turn": self.players[self.index].name if len(self.players) > self.index else None
         }
         return json.dumps(data)
 
@@ -164,7 +160,7 @@ class GameManager:
         self.players = players
         self.weapons = weapons
         self.claims_log = claims_log
-        self.clue_map = ClueMap()
+        self.clue_map = ClueMap(self)
 
     def get_player(self, name):
         for player in self.players:
