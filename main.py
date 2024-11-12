@@ -1,22 +1,25 @@
 import asyncio
 import json
-from websockets.asyncio.server import serve
+from websockets.asyncio.server import serve, broadcast
 
 from gameManager import GameManager
 
 game_manager = GameManager()
+connected_clients = []
 
 
 # this will recieve a message and print to the console
 async def handler(websocket):
     game_manager.set_websocket(websocket)
+    connected_clients.append(websocket)
     await websocket.send(json.dumps("Hello from server!"))
     await game_manager.send_gamestate_to_client()
     async for message in websocket:
         # handle message appropriately and update game state
         print(message)
         game_manager.parse_message(message)
-        await game_manager.send_gamestate_to_client()
+        #await game_manager.send_gamestate_to_client()
+        broadcast(connected_clients,game_manager.json_serialize())
 
 
 # start server to run forever

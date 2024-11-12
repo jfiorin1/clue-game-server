@@ -73,6 +73,10 @@ class GameManager:
 
             case _:
                 print("Unknown message type")
+    #     self.next_turn()
+    #
+    # def next_turn(self):
+    #     self.index+=1
 
     def new_game(self, players):
         if players is None:
@@ -149,7 +153,7 @@ class GameManager:
             "players": [player.dict() for player in self.players],
             "weapons": [weapon.dict() for weapon in self.weapons],
             "claims": self.claims_log.array_of_claims_dicts(),
-            "player_turn": self.players[self.index].name if len(self.players) > self.index else None
+            "player_turn": self.players[self.index].name if len(self.players) > 2 else None
         }
         return json.dumps(data)
 

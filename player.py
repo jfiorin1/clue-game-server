@@ -102,14 +102,14 @@ class ClueCharacter(Enum):
     def get_default_position(self):
         match self:
             case ClueCharacter.MRS_WHITE:
-                return 4, 3
+                return 4, 6
             case ClueCharacter.MRS_PEACOCK:
-                return 0, 3
+                return 0, 4
             case ClueCharacter.PROFESSOR_PLUM:
-                return 0, 1
+                return 0, 2
             case ClueCharacter.COLONEL_MUSTARD:
-                return 4, 1
+                return 6, 2
             case ClueCharacter.MISS_SCARLETT:
-                return 3, 0
+                return 4, 0
             case ClueCharacter.REVEREND_GREEN:
-                return 1, 4
+                return 2, 6
