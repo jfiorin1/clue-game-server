@@ -37,6 +37,7 @@ class GameManager:
         self.new_game(players)
 
     def parse_message(self, message):
+        message = json.loads(message)
         message_type = message["message_type"]
         player_name = message["player_name"]
         match message_type:
