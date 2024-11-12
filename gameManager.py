@@ -10,6 +10,7 @@ Date: 2024-10-20
 import json
 import os
 import random
+from operator import index
 
 from card import CharacterCard, WeaponCard, RoomCard
 from claim import Accusation, Suggestion
@@ -146,7 +147,8 @@ class GameManager:
         data = {
             "players": [player.dict() for player in self.players],
             "weapons": [weapon.dict() for weapon in self.weapons],
-            "claims": self.claims_log.array_of_claims_dicts()
+            "claims": self.claims_log.array_of_claims_dicts(),
+            "player_turn": self.players[index()].name
         }
         return json.dumps(data)
 
