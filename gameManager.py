@@ -148,7 +148,7 @@ class GameManager:
             "players": [player.dict() for player in self.players],
             "weapons": [weapon.dict() for weapon in self.weapons],
             "claims": self.claims_log.array_of_claims_dicts(),
-            "player_turn": self.players[index].name
+            "player_turn": self.players[self.index].name
         }
         return json.dumps(data)
 
