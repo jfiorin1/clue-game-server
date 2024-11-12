@@ -159,7 +159,7 @@ class GameManager:
         self.players = players
         self.weapons = weapons
         self.claims_log = claims_log
-        self.clue_map = ClueMap()
+        self.clue_map = ClueMap(self)
 
     def get_player(self, name):
         for player in self.players:
