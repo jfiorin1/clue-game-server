@@ -85,17 +85,15 @@ class GameManager:
         player = self.get_player(name)
         player.get_turn_manager().skip_to_accuse()
 
-    def make_claim(self, is_accuse, player, character, weapon, room):
+    def make_claim(self, is_accuse, name, character, weapon, room):
         claim = None
+        player = self.get_player(name)
         if is_accuse:
-            claim = Accusation(player, character, weapon, room)
+            claim = Accusation(player, ClueCharacter(character), WeaponName(weapon), Room(room))
         else:
-            claim = Suggestion(player, character, weapon, room)
+            claim = Suggestion(player, ClueCharacter(character), WeaponName(weapon), Room(room))
 
         self.claims_log.add_claim(claim)
-
-    def next_player(self):
-        self.index = (self.index + 1) % len(self.players)
 
     def reset(self, players=None):
         self.new_game(players)
