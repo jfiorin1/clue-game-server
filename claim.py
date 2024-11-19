@@ -7,7 +7,7 @@ This module contains the Claim class and its subclasses:
 - Suggestion: Represents a suggestion made by a player
 - Accusation: Represents an accusation made by a player
 
-Author: Stephen "Christian" Kocsis
+Author: Nick Weiner & Stephen "Christian" Kocsis
 Date: 2024-10-30
 """
 from abc import ABC, abstractmethod
@@ -41,7 +41,7 @@ class Claim(ABC):
 
 class Suggestion(Claim):
     def make_string(self):
-        return f"I suggest it was {self.character.value} with the {self.weaponName.value} in the {self.room.value}"
+        return f"{self.player.name} suggests it was {self.character.value} with the {self.weaponName.value} in the {self.room.value}"
 
     def dict(self):
         data = {
@@ -57,7 +57,7 @@ class Suggestion(Claim):
 
 class Accusation(Claim):
     def make_string(self):
-        return f"I accuse {self.character.value} with the {self.weaponName.value} in the {self.room.value}"
+        return f"{self.player.name} accuses {self.character.value} with the {self.weaponName.value} in the {self.room.value}"
 
     def dict(self):
         data = {

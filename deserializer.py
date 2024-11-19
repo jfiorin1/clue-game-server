@@ -12,8 +12,6 @@ import json
 from card import CharacterCard, WeaponCard, RoomCard
 from claim import Accusation, Suggestion
 from claimsLog import ClaimsLog
-from gameManager import GameManager
-from main import game_manager
 from weapon import WeaponName, Weapon
 from player import Player, ClueCharacter
 from room import Room
@@ -61,7 +59,7 @@ class Deserializer():
     def deserialize_players(self, data):
         players = []
         for player in data['players']:
-            p = Player(player["name"], ClueCharacter(player["character"]))
+            p = Player(player["name"], ClueCharacter(player["character"]), self.gameManager)
             p.set_position(player["position"]["x"], player["position"]["y"])
 
             cards = self.deserialize_cards(player)

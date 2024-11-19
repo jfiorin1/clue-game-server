@@ -11,19 +11,20 @@ import random
 import json
 
 from room import Room
-from gameManager import gameManager
+
 
 class ClueMap:
 
-    def __init__(self):
+    def __init__(self, game_manager):
         self.weapon_map = {}
         self.player_map = [[None] * 5] * 5
+        self.game_manager = game_manager
 
-        for player in gameManager.players:
+        for player in self.game_manager.players:
             position = player.character.get_default_position()
             self.player_map[position[0]][position[1]] = player
 
-        for weapon in gameManager.weapons:
+        for weapon in self.game_manager.weapons:
             rooms = [room for room in Room]
             weapon.room = rooms[random.randint(0, len(Room) - 1)]
             self.weapon_map[weapon] = weapon.room

@@ -11,12 +11,11 @@ from room import Room
 
 class Weapon:
 
-    def __init__(self, name, room: Room = None):
+    def __init__(self, name):
         self.name = name
-        self.room = room
 
     def __str__(self):
-        return self.name + " " + self.room
+        return self.name
 
     def get_name(self):
         return self.name.value
@@ -24,25 +23,13 @@ class Weapon:
     def get_name_enum(self):
         return self.name
 
-    def get_room(self):
-        return self.room
-
-    def set_room(self, room):
-        self.room = room
-
     @staticmethod
     def generate_unassigned_weapons():
-        return [Weapon(name, None) for name in WeaponName]
+        return [Weapon(name) for name in WeaponName]
 
     def dict(self):
-        if self.room is None:
-            coordinates = None
-        else:
-            coordinates = self.room.coordinates
-
         data = {
             "name": self.get_name(),
-            "room": coordinates
         }
         return data
 

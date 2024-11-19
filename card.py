@@ -8,7 +8,7 @@ This module contains the Card class and its subclasses:
 - Weapon: Represents a weapon in the game
 - Room: Represents a room in the game
 
-Author: Stephen "Christian" Kocsis
+Author: Nick Weiner & Stephen "Christian" Kocsis
 Date: 2024-10-30
 """
 from abc import ABC, abstractmethod
@@ -42,6 +42,10 @@ class CharacterCard(Card):
         }
         return data
 
+    def deserialize(self, jstring):
+        data = json.loads(jstring)
+        self.character.value = data["character_card"]
+
     def get_subject(self):
         return self.character
 
@@ -56,6 +60,10 @@ class WeaponCard(Card):
         }
         return data
 
+    def deserialize(self, jstring):
+        data = json.loads(jstring)
+        self.weaponName.value = data["weapon_card"]
+
     def get_subject(self):
         return self.weaponName
 
@@ -69,6 +77,10 @@ class RoomCard(Card):
             "room_card": self.room.value
         }
         return data
+
+    def deserialize(self, jstring):
+        data = json.loads(jstring)
+        self.room.value = data["room_card"]
 
     def get_subject(self):
         return self.room
