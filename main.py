@@ -24,8 +24,6 @@ async def handler(websocket):
 
 # start server to run forever
 async def main():
-
-
     async with serve(handler, "", 3000):
         # dummy = {
         #     "message_type": "player_join",
