@@ -20,13 +20,19 @@ class Move:
 
     def validate_move(self):
         """Validate if the move is allowed."""
+        # Check if the player is already in a room
         if self.start_location is None:
             raise ValueError(f"{self.player.name} is not in any room.")
         
+        # Check if the end location is connected to the start location
         if self.end_location not in self.start_location.connections:
             raise ValueError(f"Invalid move: {self.player.name} cannot move from {self.start_location.name} to {self.end_location.name}.")
-
-        return True  # Placeholder for actual validation logic
+        
+        # Check if the destination room is occupied by another player
+        if self.end_location.is_occupied():
+            raise ValueError(f"Invalid move: {self.end_location.name} is already occupied by another player.")
+        
+        return True  # Return True if the move is valid
 
     def execute_move(self):
         """Execute the move and update player position."""
