@@ -21,7 +21,9 @@ class ClueCharacter:
             'suggestions_made': 0,
             'successful_suggestions': 0,
             'accusations_made': 0,
-            'successful_accusations': 0
+            'successful_accusations': 0,
+            'failed_suggestions': 0,  # Track failed suggestions
+            'failed_accusations': 0  # Track failed accusations
         }
         self.history = []  # History of actions taken by the character
 
@@ -42,13 +44,42 @@ class ClueCharacter:
         """Record a suggestion made by the character."""
         self.statistics['suggestions_made'] += 1
         self.history.append(f"{self.name} suggested: {weapon} and {character}.")
-        return f"{self.name} suggests that {weapon} was used by {character} in {self.default_location.name}."
+        
+        # Assume the suggestion could fail or succeed
+        success = self._check_suggestion(weapon, character)
+        if success:
+            self.statistics['successful_suggestions'] += 1
+            return f"{self.name} suggests that {weapon} was used by {character} in {self.default_location.name}."
+        else:
+            self.statistics['failed_suggestions'] += 1
+            return f"{self.name} suggests that {weapon} was used by {character} in {self.default_location.name}, but the suggestion was not valid."
 
     def make_accusation(self, weapon, character):
         """Record an accusation made by the character."""
         self.statistics['accusations_made'] += 1
         self.history.append(f"{self.name} accused: {weapon} and {character}.")
-        return f"{self.name} accuses that {weapon} was used by {character} in {self.default_location.name}."
+        
+        # Assume the accusation could fail or succeed
+        success = self._check_accusation(weapon, character)  # Example of checking accusation validity
+        if success:
+            self.statistics['successful_accusations'] += 1
+            return f"{self.name} accuses that {weapon} was used by {character} in {self.default_location.name}."
+        else:
+            self.statistics['failed_accusations'] += 1
+            return f"{self.name} accuses that {weapon} was used by {character} in {self.default_location.name}, but the accusation was incorrect."
+
+    def _check_suggestion(self, weapon, character):
+        """Check if a suggestion is valid."""
+        if self.has_card(weapon) or self.has_card(character):
+            return False
+        return True
+
+    def _check_accusation(self, weapon, character):
+        """Check if an accusation is correct."""
+        actual_solution = game_state.solution
+        if (weapon, character) == actual_solution:
+            return True
+        return False
 
     def get_info(self):
         """Return character info, including location and cards."""
@@ -59,7 +90,9 @@ class ClueCharacter:
             f"Statistics - Suggestions Made: {self.statistics['suggestions_made']}, "
             f"Successful Suggestions: {self.statistics['successful_suggestions']}, "
             f"Accusations Made: {self.statistics['accusations_made']}, "
-            f"Successful Accusations: {self.statistics['successful_accusations']}."
+            f"Successful Accusations: {self.statistics['successful_accusations']}, "
+            f"Failed Suggestions: {self.statistics['failed_suggestions']}, "
+            f"Failed Accusations: {self.statistics['failed_accusations']}."
         )
 
     def serialize(self):
@@ -72,12 +105,12 @@ class ClueCharacter:
             "history": self.history
         }
 
-    @classmethod # Class method - bvound to the class and not the instance of the class
+    @classmethod
     def deserialize(cls, data):
         """Deserialize character data from JSON."""
         character = cls(data['name'], data.get('default_location'))
         character.statistics = data['statistics']
         character.history = data['history']
-        character.cards = [Card.CharacterCard(name) for name in data['cards']]
+        character.cards = [Card.CharacterCard(name) for name in data['cards']]  # Make sure Card is defined
         return character
         
