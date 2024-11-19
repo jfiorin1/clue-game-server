@@ -21,11 +21,19 @@ class Room(Enum):
     KITCHEN = "Kitchen"
 
     def get_coordinates(self):
-        return _room_coordinates[self]
+        """Return the coordinates of the room"""
+        try:
+            return _room_coordinates[self]
+        except KeyError:
+            raise ValueError(f"Coordinates for {self.name} are not defined.")
 
     @staticmethod
     def get_room(coordinates):
-        return _reversed_coordinates.get(coordinates, None)
+        """Return the Room based on coordinates"""
+        room = _reversed_coordinates.get(coordinates)
+        if not room:
+            raise ValueError(f"No room found for coordinates {coordinates}.")
+        return room
 
 _room_coordinates = {
     Room.STUDY: (0, 0),
