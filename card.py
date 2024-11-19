@@ -11,12 +11,13 @@ This module contains the Card class and its subclasses:
 Author: Stephen "Christian" Kocsis
 Date: 2024-10-30
 """
+
 from abc import ABC, abstractmethod
 
 
 class Card(ABC):
     def __init__(self, player=None):
-        self.player = player
+        self.player = player  # Player the card belongs to
 
     @abstractmethod
     def dict(self):
@@ -25,6 +26,10 @@ class Card(ABC):
     @abstractmethod
     def get_subject(self):
         pass
+
+    def __str__(self):
+        return f"{self.__class__.__name__} - {self.get_subject()}"
+
 
 class CharacterCard(Card):
     def __init__(self, character):
@@ -32,13 +37,16 @@ class CharacterCard(Card):
         self.character = character
 
     def dict(self):
-        data = {
-            "character_card":  self.character.value
+        return {
+            "character_card": self.character.value
         }
-        return data
 
     def get_subject(self):
         return self.character
+
+    def __str__(self):
+        return f"Character: {self.character}"
+
 
 class WeaponCard(Card):
     def __init__(self, weapon):
@@ -46,13 +54,16 @@ class WeaponCard(Card):
         self.weapon = weapon
 
     def dict(self):
-        data = {
-            "weapon_card":  self.weapon.get_name()
+        return {
+            "weapon_card": self.weapon.get_name()
         }
-        return data
 
     def get_subject(self):
         return self.weapon
+
+    def __str__(self):
+        return f"Weapon: {self.weapon.get_name()}"
+
 
 class RoomCard(Card):
     def __init__(self, room):
@@ -60,10 +71,13 @@ class RoomCard(Card):
         self.room = room
 
     def dict(self):
-        data = {
+        return {
             "room_card": self.room.value
         }
-        return data
 
     def get_subject(self):
         return self.room
+
+    def __str__(self):
+        return f"Room: {self.room}"
+        
