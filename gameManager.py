@@ -34,6 +34,7 @@ class GameManager:
         self.murder = None
         self.deck = []
         self.claims_log = None
+        self.num_ready = 0
 
         self.new_game(players)
 
@@ -52,6 +53,11 @@ class GameManager:
                     self.add_player(player_name, "Miss Scarlett")
                 else:
                     self.websocket.send("TOO MANY PLAYERS GET OUT")
+
+            case "player_ready":
+                self.num_ready += 1
+                if self.num_ready == len(self.players):
+                    self.setup_game()
 
             # Player move
             case "player_move":
@@ -94,7 +100,9 @@ class GameManager:
             self.weapons.append(weapon)
         self.claims_log = ClaimsLog()
 
-        self.setup_game()
+        print(players)
+        if len(self.players) > 0:
+            self.setup_game()
 
     def get_all_cards(self):
         cards = []
@@ -151,7 +159,7 @@ class GameManager:
     def json_serialize(self):
         data = {
             "players": [player.dict() for player in self.players],
-            "weapons": [weapon.dict() for weapon in self.weapons],
+            # "weapons": [weapon.dict() for weapon in self.weapons],
             "claims": self.claims_log.array_of_claims_dicts(),
             "player_turn": self.players[self.index].name if len(self.players) > 2 else None
         }
@@ -211,8 +219,7 @@ class GameManager:
 
     def deal_cards(self):
         """Distribute cards among players."""
-        for player in self.players:
-            cards = []
-            for i in range(3):
-                cards.append(self.draw())
-            player.add_cards(cards)
+        i = 0
+        while len(self.deck) > 0:
+            self.players[i].add_cards([self.draw()])
+            i = (i + 1) % len(self.players)
