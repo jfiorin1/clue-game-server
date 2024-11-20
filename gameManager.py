@@ -178,6 +178,9 @@ class GameManager:
 
     def set_murder(self, character, weapon, room):
         self.murder = (character, weapon, room)
+        print(self.murder)
+        print("murder cards in deck:", [c.get_subject().value for c in self.deck if c.get_subject() in [character, room, weapon]])
+        print("num cards in deck", len(self.deck))
 
     async def send_gamestate_to_client(self):
         await self.websocket.send(self.json_serialize())
@@ -200,7 +203,7 @@ class GameManager:
         rand_weapon = random.choice([w for w in WeaponName])
         rand_room = random.choice([r for r in Room])
 
-        self.deck = [c for c in self.deck if c.get_subject() not in [rand_char, rand_room, rand_room]]
+        self.deck = [c for c in self.deck if c.get_subject() not in [rand_char, rand_weapon, rand_room]]
 
         self.set_murder(rand_char, rand_weapon, rand_room)
 
