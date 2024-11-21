@@ -46,11 +46,17 @@ class GameManager:
             case "player_join":
                 # Minimal Version
                 if len(self.players) == 0:
-                    self.add_player(player_name, "Colonel Mustard")
-                elif len(self.players) == 1:
-                    self.add_player(player_name, "Professor Plum")
-                elif len(self.players) == 2:
                     self.add_player(player_name, "Miss Scarlett")
+                elif len(self.players) == 1:
+                    self.add_player(player_name, "Colonel Mustard")
+                elif len(self.players) == 2:
+                    self.add_player(player_name, "Professor Plum")
+                elif len(self.players) == 3:
+                    self.add_player(player_name, "Mrs. Peacock")
+                elif len(self.players) == 4:
+                    self.add_player(player_name, "Reverend Green")
+                elif len(self.players) == 5:
+                    self.add_player(player_name, "Mrs. White")
                 else:
                     self.websocket.send("TOO MANY PLAYERS GET OUT")
 

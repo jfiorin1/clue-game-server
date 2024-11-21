@@ -25,22 +25,6 @@ async def handler(websocket):
 # start server to run forever
 async def main():
     async with serve(handler, "", 3000):
-        dummy = {
-            "message_type": "player_join",
-            "player_name": "xxXXSniperYoMama420Xxx"
-        }
-        dummy_json = json.dumps(dummy)
-        game_manager.parse_message(dummy_json)
-        game_manager.parse_message(dummy_json)
-        game_manager.parse_message(dummy_json)
-        dummy = {
-            "message_type": "player_ready",
-            "player_name": "xxXXSniperYoMama420Xxx"
-        }
-        dummy_json = json.dumps(dummy)
-        game_manager.parse_message(dummy_json)
-        game_manager.parse_message(dummy_json)
-        game_manager.parse_message(dummy_json)
         print(game_manager.json_serialize())
         # [print(player.characterHandler.character.value) for player in game_manager.players]
         await asyncio.get_running_loop().create_future()
