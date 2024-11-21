@@ -23,6 +23,7 @@ class Player:
         self.cards = []
         self.notes = ""
         self.is_active = True
+        self.is_eliminated = False
 
 
     def __str__(self):
@@ -57,6 +58,9 @@ class Player:
     def add_note(self, note):
         self.notes += note
 
+    def eliminate(self):
+        self.is_eliminated = True
+
     def _get_cards_dict(self):
         return [card.dict() for card in self.cards]
 
@@ -70,18 +74,11 @@ class Player:
             },
             "cards": self._get_cards_dict(),
             "notes": self.notes,
-            "is_active": self.is_active
+            "is_active": self.is_active,
+            "is_eliminated": self.is_eliminated
         }
 
         return data
-
-    def make_suggestion(self, character, weaponName, room):
-        suggestion = Suggestion(self, character, weaponName, room)
-        self.gameManager.claims_log.add_claim(suggestion)
-
-    def make_accusation(self, character, weaponName, room):
-        accusation = Accusation(self, character, weaponName, room)
-        self.gameManager.claims_log.add_claim(accusation)
 
 class CharacterHandler:
     def __init__(self, character):

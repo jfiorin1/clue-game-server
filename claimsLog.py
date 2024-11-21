@@ -11,13 +11,13 @@ Date: 2024-10-20
 class ClaimsLog:
 
     def __init__(self):
-        self.log = []
+        self.logs = []
 
-    def add_claim(self, claim):
-        self.log.append(claim)
+    def add_claim(self, claim, subject=None, disprover_name=None):
+            self.logs.append((claim, subject, disprover_name))
 
     def get_log(self):
-        return self.log
+        return self.logs
 
     def array_of_claims_dicts(self):
-        return [log.dict() for log in self.log]
+        return [log.format_dict(subject, disprover) for log, subject, disprover in self.logs]

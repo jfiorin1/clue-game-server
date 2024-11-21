@@ -35,6 +35,7 @@ class GameManager:
         self.deck = []
         self.claims_log = None
         self.num_ready = 0
+        self.winner = None
 
         self.new_game(players)
 
@@ -95,6 +96,7 @@ class GameManager:
         self.deserializer = Deserializer(self)
         self.murder = None
         self.deck = self.get_all_cards()
+        self.winner = None
         for name in WeaponName:
             weapon = Weapon(name)
             self.weapons.append(weapon)
@@ -136,14 +138,40 @@ class GameManager:
         player.get_turn_manager().skip_to_accuse()
 
     def make_claim(self, is_accuse, name, character, weapon, room):
-        claim = None
         player = self.get_player(name)
         if is_accuse:
             claim = Accusation(player, ClueCharacter(character), WeaponName(weapon), Room(room))
+            subject = None
+            disprover_name = None
+
+            if self.validate_accusation(claim):
+                self.winner = self.get_player(name)
+                print(name, " wins!")
+            else:
+                player.eliminate()
         else:
             claim = Suggestion(player, ClueCharacter(character), WeaponName(weapon), Room(room))
+            validation = self.validate_suggestion(claim)
+            subject = validation[1]
+            disprover_name = validation[2]
 
-        self.claims_log.add_claim(claim)
+        self.claims_log.add_claim(claim, subject, disprover_name)
+
+    def validate_suggestion(self, claim):
+        for i in range(len(self.players)):
+            loop_index = (i + 1) % len(self.players)
+            player = self.players[loop_index]
+
+            for card in player.get_cards():
+                if card.get_subject() in claim.get_subjects():
+                    return False, card.get_subject(), player.name
+
+        return True, None, None
+
+    def validate_accusation(self, claim):
+        subjects = claim.get_subjects()
+        return (subjects[0].value == self.murder[0].value and subjects[1].value == self.murder[1].value
+                and subjects[2].value == self.murder[2].value)
 
     def reset(self, players=None):
         self.new_game(players)
@@ -159,9 +187,9 @@ class GameManager:
     def json_serialize(self):
         data = {
             "players": [player.dict() for player in self.players],
-            # "weapons": [weapon.dict() for weapon in self.weapons],
             "claims": self.claims_log.array_of_claims_dicts(),
-            "player_turn": self.players[self.index].name if len(self.players) > 2 else None
+            "player_turn": self.players[self.index].name if len(self.players) > 2 else None,
+            "winner": None if self.winner is None else self.winner.name
         }
         return json.dumps(data)
 
@@ -204,8 +232,6 @@ class GameManager:
         pass
 
     def setup_game(self):
-        """Set up the game components."""
-
         # Randomly select murderer, weapon, and room for the crime
         rand_char = random.choice([c for c in ClueCharacter])
         rand_weapon = random.choice([w for w in WeaponName])
@@ -218,7 +244,6 @@ class GameManager:
         self.deal_cards()  # Deal cards to players after setup
 
     def deal_cards(self):
-        """Distribute cards among players."""
         i = 0
         while len(self.deck) > 0:
             self.players[i].add_cards([self.draw()])
