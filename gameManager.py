@@ -35,6 +35,7 @@ class GameManager:
         self.deck = []
         self.claims_log = None
         self.num_ready = 0
+        self.prevent_join = False
 
         self.new_game(players)
 
@@ -44,6 +45,9 @@ class GameManager:
         player_name = message["player_name"]
         match message_type:
             case "player_join":
+                if self.prevent_join:
+                    return
+
                 # Minimal Version
                 if len(self.players) == 0:
                     self.add_player(player_name, "Miss Scarlett")
@@ -62,8 +66,12 @@ class GameManager:
 
             case "player_ready":
                 self.num_ready += 1
-                if self.num_ready == len(self.players):
+                if self.num_ready == len(self.players) and 3 <= self.num_ready <= 6:
                     self.setup_game()
+                    self.prevent_join = True
+
+            case "player_unready":
+                self.num_ready -= 1
 
             # Player move
             case "player_move":
