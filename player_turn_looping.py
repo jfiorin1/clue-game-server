@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+
+"""
+Player Turn Looping Logic
+
+Author: Stephen "Christian" Kocsis
+Date: 2024-11-28
+"""
+
 import asyncio
 import websockets
 import json
