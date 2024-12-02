@@ -35,6 +35,7 @@ class GameManager:
         self.deck = []
         self.claims_log = None
         self.num_ready = 0
+        self.game_start = False
 
         self.new_game(players)
 
@@ -163,11 +164,13 @@ class GameManager:
         self.websocket = websocket
 
     def json_serialize(self):
+        print(self.game_start)
         data = {
             "players": [player.dict() for player in self.players],
             # "weapons": [weapon.dict() for weapon in self.weapons],
             "claims": self.claims_log.array_of_claims_dicts(),
-            "player_turn": self.players[self.index].name if len(self.players) > 2 else None
+            "player_turn": self.players[self.index].name if len(self.players) > 2 else None,
+            "game_start": "game_started" if self.game_start == True else None
         }
         return json.dumps(data)
 
@@ -211,6 +214,8 @@ class GameManager:
 
     def setup_game(self):
         """Set up the game components."""
+
+        self.game_start = True
 
         # Randomly select murderer, weapon, and room for the crime
         rand_char = random.choice([c for c in ClueCharacter])
