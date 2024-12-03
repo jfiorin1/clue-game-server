@@ -1,8 +1,12 @@
 import asyncio
 import json
+import time
 from websockets.asyncio.server import serve, broadcast
 
 from gameManager import GameManager
+from player import ClueCharacter
+from room import Room
+from weapon import WeaponName
 
 game_manager = GameManager()
 connected_clients = []
@@ -25,6 +29,7 @@ async def handler(websocket):
 # start server to run forever
 async def main():
     async with serve(handler, "", 3000):
+
         print(game_manager.json_serialize())
         # [print(player.characterHandler.character.value) for player in game_manager.players]
         await asyncio.get_running_loop().create_future()

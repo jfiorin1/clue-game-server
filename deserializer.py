@@ -40,8 +40,11 @@ class Deserializer():
             weaponName = WeaponName(body["weapon"])
             room = Room(body["room"])
 
+            subject = body['disproving_subject']
+            disprover = body['disprover']
+
             if suggestion:
-                claims_log.add_claim(Suggestion(player, character, weaponName, room))
+                claims_log.add_claim(Suggestion(player, character, weaponName, room), subject, disprover)
             else:
                 claims_log.add_claim(Accusation(player, character, weaponName, room))
 
