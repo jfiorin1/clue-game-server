@@ -36,6 +36,9 @@ class GameManager:
         self.claims_log = None
         self.num_ready = 0
         self.winner = None
+        self.game_start = False
+        self.prevent_join = False
+
 
         self.new_game(players)
 
@@ -45,20 +48,33 @@ class GameManager:
         player_name = message["player_name"]
         match message_type:
             case "player_join":
+                if self.prevent_join:
+                    return
+
                 # Minimal Version
                 if len(self.players) == 0:
-                    self.add_player(player_name, "Colonel Mustard")
-                elif len(self.players) == 1:
-                    self.add_player(player_name, "Professor Plum")
-                elif len(self.players) == 2:
                     self.add_player(player_name, "Miss Scarlett")
+                elif len(self.players) == 1:
+                    self.add_player(player_name, "Colonel Mustard")
+                elif len(self.players) == 2:
+                    self.add_player(player_name, "Professor Plum")
+                elif len(self.players) == 3:
+                    self.add_player(player_name, "Mrs. Peacock")
+                elif len(self.players) == 4:
+                    self.add_player(player_name, "Reverend Green")
+                elif len(self.players) == 5:
+                    self.add_player(player_name, "Mrs. White")
                 else:
                     self.websocket.send("TOO MANY PLAYERS GET OUT")
 
             case "player_ready":
                 self.num_ready += 1
-                if self.num_ready == len(self.players):
+                if self.num_ready == len(self.players) and 3 <= self.num_ready <= 6:
                     self.setup_game()
+                    self.prevent_join = True
+
+            case "player_unready":
+                self.num_ready -= 1
 
             # Player move
             case "player_move":
@@ -185,11 +201,14 @@ class GameManager:
         self.websocket = websocket
 
     def json_serialize(self):
+        print(self.game_start)
         data = {
             "players": [player.dict() for player in self.players],
             "claims": self.claims_log.array_of_claims_dicts(),
             "player_turn": self.players[self.index].name if len(self.players) > 2 else None,
             "winner": None if self.winner is None else self.winner.name
+            "game_start": "game_started" if self.game_start == True else None
+
         }
         return json.dumps(data)
 
@@ -232,6 +251,10 @@ class GameManager:
         pass
 
     def setup_game(self):
+        """Set up the game components."""
+
+        self.game_start = True
+
         # Randomly select murderer, weapon, and room for the crime
         rand_char = random.choice([c for c in ClueCharacter])
         rand_weapon = random.choice([w for w in WeaponName])
