@@ -103,10 +103,6 @@ class GameManager:
 
             case _:
                 print("Unknown message type")
-    #     self.next_turn()
-    #
-    # def next_turn(self):
-    #     self.index+=1
 
     def new_game(self, players):
         if players is None:
@@ -170,7 +166,7 @@ class GameManager:
                     break
 
     def _next_player(self):
-        self.index += 1
+        self.index = (self.index + 1) % len(self.players)
         self.players[self.index].get_turn_manager().start_turn()
 
     def set_current_inactive(self):
@@ -189,6 +185,7 @@ class GameManager:
                 print(name, " wins!")
             else:
                 player.eliminate()
+                player.is_active = False
         else:
             claim = Suggestion(player, ClueCharacter(character), WeaponName(weapon), Room(room))
             validation = self._validate_suggestion(claim)
@@ -263,9 +260,6 @@ class GameManager:
 
     async def send_gamestate_to_client(self):
         await self.websocket.send(self.json_serialize())
-
-    def next_phase(self):
-        self.players[self.index].turn.next_phase()
 
     # New methods for saving and loading game state
     def save_game_state(self, filename="game_state.json"):
