@@ -34,3 +34,4 @@ class TurnPhase(Enum):
     SUGGEST = 2
     REFUTE = 3
     ACCUSE = 4
+    END = 5
