@@ -16,6 +16,7 @@ from card import CharacterCard, WeaponCard, RoomCard
 from claim import Accusation, Suggestion
 from claimsLog import ClaimsLog
 from clueMap import ClueMap
+from playerTurnManager import TurnPhase
 from weapon import WeaponName, Weapon
 from player import Player, ClueCharacter
 from room import Room
@@ -84,7 +85,7 @@ class GameManager:
 
             # Accuse other player
             case "skip_to_accuse":
-                self.skip_to_accuse(player_name)
+                self.skip_to_accuse()
 
             # Make a claim
             case "make_claim":
@@ -94,12 +95,14 @@ class GameManager:
                 room = message["room"]
                 self.make_claim(is_accused, player_name, character, weapon, room)
 
+            case "next_phase":
+                self.next_phase()
+
+            case "set_inactive":
+                self.set_current_inactive()
+
             case _:
                 print("Unknown message type")
-    #     self.next_turn()
-    #
-    # def next_turn(self):
-    #     self.index+=1
 
     def new_game(self, players):
         if players is None:
@@ -149,9 +152,26 @@ class GameManager:
         player = self.get_player(name)
         player.set_position(x, y)
 
-    def skip_to_accuse(self, name):
-        player = self.get_player(name)
-        player.get_turn_manager().skip_to_accuse()
+    def skip_to_accuse(self):
+        self.players[self.index].get_turn_manager().skip_to_accuse()
+
+    def next_phase(self):
+        self.players[self.index].get_turn_manager().next_phase()
+
+        if self.players[self.index].get_turn_manager().phase == TurnPhase.END:
+            while True:
+                self._next_player()
+
+                if self.players[self.index].is_active:
+                    break
+
+    def _next_player(self):
+        self.index = (self.index + 1) % len(self.players)
+        self.players[self.index].get_turn_manager().start_turn()
+
+    def set_current_inactive(self):
+        self.players[self.index].is_active = False
+        self._next_player()
 
     def make_claim(self, is_accuse, name, character, weapon, room):
         player = self.get_player(name)
@@ -160,20 +180,21 @@ class GameManager:
             subject = None
             disprover_name = None
 
-            if self.validate_accusation(claim):
+            if self._validate_accusation(claim):
                 self.winner = self.get_player(name)
                 print(name, " wins!")
             else:
                 player.eliminate()
+                player.is_active = False
         else:
             claim = Suggestion(player, ClueCharacter(character), WeaponName(weapon), Room(room))
-            validation = self.validate_suggestion(claim)
+            validation = self._validate_suggestion(claim)
             subject = validation[1]
             disprover_name = validation[2]
 
         self.claims_log.add_claim(claim, subject, disprover_name)
 
-    def validate_suggestion(self, claim):
+    def _validate_suggestion(self, claim):
         for i in range(len(self.players)):
             loop_index = (i + 1) % len(self.players)
             player = self.players[loop_index]
@@ -184,7 +205,7 @@ class GameManager:
 
         return True, None, None
 
-    def validate_accusation(self, claim):
+    def _validate_accusation(self, claim):
         subjects = claim.get_subjects()
         return (subjects[0].value == self.murder[0].value and subjects[1].value == self.murder[1].value
                 and subjects[2].value == self.murder[2].value)
@@ -206,7 +227,7 @@ class GameManager:
             "players": [player.dict() for player in self.players],
             "claims": self.claims_log.array_of_claims_dicts(),
             "player_turn": self.players[self.index].name if len(self.players) > 2 else None,
-            "winner": None if self.winner is None else self.winner.name
+            "winner": None if self.winner is None else self.winner.name,
             "game_start": "game_started" if self.game_start == True else None
 
         }
@@ -239,9 +260,6 @@ class GameManager:
 
     async def send_gamestate_to_client(self):
         await self.websocket.send(self.json_serialize())
-
-    def next_phase(self):
-        self.players[self.index].turn.next_phase()
 
     # New methods for saving and loading game state
     def save_game_state(self, filename="game_state.json"):
