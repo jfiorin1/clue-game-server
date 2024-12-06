@@ -87,6 +87,9 @@ class GameManager:
             case "skip_to_accuse":
                 self.skip_to_accuse()
 
+            case "skip_to_end":
+                self.skip_to_end()
+
             # Make a claim
             case "make_claim":
                 is_accused = message["is_accused"]
@@ -176,6 +179,9 @@ class GameManager:
     def set_current_inactive(self):
         self.players[self.index].is_active = False
         self._next_player()
+
+    def skip_to_end(self):
+        self.players[self.index].get_turn_manager().skip_to_end()
 
     def make_claim(self, is_accuse, name, character, weapon, room):
         player = self.get_player(name)
