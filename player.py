@@ -79,7 +79,7 @@ class Player:
             "is_active": self.is_active,
             "is_eliminated": self.is_eliminated,
             "was_moved": self.was_moved,
-            "is_surrounded": self.check_if_surrounded
+            "is_surrounded": self._check_if_surrounded()
         }
 
         return data
@@ -87,7 +87,7 @@ class Player:
     def set_was_moved(self, was_moved):
         self.was_moved = was_moved
 
-    def check_if_surrounded(self):
+    def _check_if_surrounded(self):
         return self.gameManager.clue_map.is_surrounded(self.characterHandler.position)
 
 class CharacterHandler:
