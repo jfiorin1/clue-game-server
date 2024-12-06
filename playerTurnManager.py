@@ -22,6 +22,9 @@ class PlayerTurnManager:
     def next_phase(self):
         self.phase = TurnPhase(self.phase.value + 1)
 
+    def skip_to_suggest(self):
+        self.phase = TurnPhase.SUGGEST
+
     def skip_to_accuse(self):
         self.phase = TurnPhase.ACCUSE
 

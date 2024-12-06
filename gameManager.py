@@ -149,6 +149,9 @@ class GameManager:
         player = self.get_player(name)
         player.set_position(x, y)
 
+    def skip_to_suggest(self):
+        self.players[self.index].skip_to_suggest()
+
     def skip_to_accuse(self, name):
         player = self.get_player(name)
         player.get_turn_manager().skip_to_accuse()
