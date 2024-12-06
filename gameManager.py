@@ -86,6 +86,9 @@ class GameManager:
             case "skip_to_accuse":
                 self.skip_to_accuse(player_name)
 
+            case "skip_to_end":
+                self.skip_to_end()
+
             # Make a claim
             case "make_claim":
                 is_accused = message["is_accused"]
@@ -153,6 +156,9 @@ class GameManager:
         player = self.get_player(name)
         player.get_turn_manager().skip_to_accuse()
 
+    def skip_to_end(self):
+        self.players[self.index].get_turn_manager().skip_to_end()
+
     def make_claim(self, is_accuse, name, character, weapon, room):
         player = self.get_player(name)
         if is_accuse:
@@ -206,7 +212,7 @@ class GameManager:
             "players": [player.dict() for player in self.players],
             "claims": self.claims_log.array_of_claims_dicts(),
             "player_turn": self.players[self.index].name if len(self.players) > 2 else None,
-            "winner": None if self.winner is None else self.winner.name
+            "winner": None if self.winner is None else self.winner.name,
             "game_start": "game_started" if self.game_start == True else None
 
         }
