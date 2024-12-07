@@ -166,7 +166,18 @@ class GameManager:
         self.players[self.index].get_turn_manager().next_phase()
 
         if self.players[self.index].get_turn_manager().phase == TurnPhase.END:
-            self.advance_to_next_player()
+            self._advance_to_next_player()
+
+    def skip_to_end(self):
+        self.players[self.index].get_turn_manager().skip_to_end()
+        self._advance_to_next_player()
+
+    def _advance_to_next_player(self):
+        while True:
+            self._next_player()
+
+            if self.players[self.index].is_active:
+                break
 
     def _next_player(self):
         self.index = (self.index + 1) % len(self.players)
@@ -175,17 +186,6 @@ class GameManager:
     def set_current_inactive(self):
         self.players[self.index].is_active = False
         self._next_player()
-
-    def skip_to_end(self):
-        self.players[self.index].get_turn_manager().skip_to_end()
-        self.advance_to_next_player()
-
-    def advance_to_next_player(self):
-        while True:
-            self._next_player()
-
-            if self.players[self.index].is_active:
-                break
 
     def make_claim(self, is_accuse, name, character, weapon, room):
         player = self.get_player(name)
