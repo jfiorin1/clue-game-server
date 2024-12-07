@@ -176,12 +176,13 @@ class GameManager:
         while True:
             self._next_player()
 
-            if self.players[self.index].is_active:
+            player = self.players[self.index]
+            if player.is_active:
+                player.get_turn_manager().start_turn()
                 break
 
     def _next_player(self):
         self.index = (self.index + 1) % len(self.players)
-        self.players[self.index].get_turn_manager().start_turn()
 
     def set_current_inactive(self):
         self.players[self.index].is_active = False
