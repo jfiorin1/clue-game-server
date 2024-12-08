@@ -83,6 +83,12 @@ class GameManager:
                 y = message["y_coord"]
                 self.move_player(player_name, x, y)
 
+            case "move_character":
+                x = message["x_coord"]
+                y = message["y_coord"]
+                character = message["character"]
+                self.move_character(character, x, y)
+
             # Accuse other player
             case "skip_to_accuse":
                 self.skip_to_accuse()
@@ -147,12 +153,16 @@ class GameManager:
 
     # client initiated functions
 
-    def add_player(self, name, character):
-        player = Player(name, ClueCharacter(character), self)
+    def add_player(self, name, character, is_active=True):
+        player = Player(name, ClueCharacter(character), self, is_active)
         self.players.append(player)
 
     def move_player(self, name, x, y):
         player = self.get_player(name)
+        player.set_position(x, y)
+
+    def move_character(self, character, x, y):
+        player = self.get_player(character, False)
         player.set_position(x, y)
 
     def skip_to_suggest(self):
@@ -257,9 +267,9 @@ class GameManager:
         self.claims_log = claims_log
         self.clue_map = ClueMap(self)
 
-    def get_player(self, name):
+    def get_player(self, string, is_name=True):
         for player in self.players:
-            if player.name == name:
+            if (player.name if is_name else player.get_character().name) == string:
                 return player
 
         return None
@@ -284,7 +294,12 @@ class GameManager:
         pass
 
     def setup_game(self):
-        """Set up the game components."""
+        all_chars = [character.value for character in ClueCharacter]
+        player_chars = [player.get_character().value for player in self.players]
+
+        non_initialized = set(all_chars) - set(player_chars)
+        for char in non_initialized:
+            self.add_player("", char, False)
 
         self.game_start = True
 
