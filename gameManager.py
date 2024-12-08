@@ -81,7 +81,8 @@ class GameManager:
             case "player_move":
                 x = message["x_coord"]
                 y = message["y_coord"]
-                self.move_player(player_name, x, y)
+                was_moved = message["was_moved"]
+                self.move_player(player_name, x, y, was_moved)
 
             # Accuse other player
             case "skip_to_accuse":
@@ -151,9 +152,10 @@ class GameManager:
         player = Player(name, ClueCharacter(character), self)
         self.players.append(player)
 
-    def move_player(self, name, x, y):
+    def move_player(self, name, x, y, was_moved):
         player = self.get_player(name)
         player.set_position(x, y)
+        player.set_was_moved(was_moved)
 
     def skip_to_suggest(self):
         self.players[self.index].skip_to_suggest()
