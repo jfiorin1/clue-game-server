@@ -86,7 +86,7 @@ async def main():
         #           game_manager.players[game_manager.index].turn.phase)
         #
         # dummy = {
-        #     "message_type": "skip_to_accuse",
+        #     "message_type": "skip_to_end",
         #     "player_name": "1xxXXSniperYoMama420Xxx"
         # }
         # dummy_json = json.dumps(dummy)
