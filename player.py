@@ -13,7 +13,7 @@ from playerTurnManager import PlayerTurnManager
 from claim import Suggestion, Accusation
 
 class Player:
-    def __init__(self, name, character, gameManager):
+    def __init__(self, name, character, gameManager, is_active=True):
         self.name = name
         self.characterHandler = CharacterHandler(character)
         self.turn = PlayerTurnManager()
@@ -22,7 +22,7 @@ class Player:
 
         self.cards = []
         self.notes = ""
-        self.is_active = True
+        self.is_active = is_active
         self.is_eliminated = False
 
 
@@ -67,7 +67,7 @@ class Player:
     def dict(self):
         data = {
             "name": self.name,
-            "character": self.characterHandler.character.value,
+            "character": self.get_character().value,
             "position": {
                 "x": self.characterHandler.position[0],
                 "y": self.characterHandler.position[1]
@@ -79,6 +79,9 @@ class Player:
         }
 
         return data
+
+    def get_character(self):
+        return self.characterHandler.character
 
 class CharacterHandler:
     def __init__(self, character):
