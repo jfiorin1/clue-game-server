@@ -88,7 +88,8 @@ class Player:
         self.was_moved = was_moved
 
     def _check_if_surrounded(self):
-        return self.gameManager.clue_map.is_surrounded(self.characterHandler.position)
+        x, y = self.characterHandler.position
+        return self.gameManager.clue_map.is_surrounded(x, y)
 
 class CharacterHandler:
     def __init__(self, character):
