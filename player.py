@@ -24,6 +24,8 @@ class Player:
         self.notes = ""
         self.is_active = True
         self.is_eliminated = False
+        self.was_moved = False
+        self.is_blocked = False
 
 
     def __str__(self):
@@ -75,10 +77,19 @@ class Player:
             "cards": self._get_cards_dict(),
             "notes": self.notes,
             "is_active": self.is_active,
-            "is_eliminated": self.is_eliminated
+            "is_eliminated": self.is_eliminated,
+            "was_moved": self.was_moved,
+            "is_surrounded": self._check_if_surrounded()
         }
 
         return data
+
+    def set_was_moved(self, was_moved):
+        self.was_moved = was_moved
+
+    def _check_if_surrounded(self):
+        x, y = self.characterHandler.position
+        return self.gameManager.clue_map.is_surrounded(x, y)
 
 class CharacterHandler:
     def __init__(self, character):

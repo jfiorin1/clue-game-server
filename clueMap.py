@@ -17,7 +17,7 @@ class ClueMap:
 
     def __init__(self, game_manager):
         self.weapon_map = {}
-        self.player_map = [[None] * 5] * 5
+        self.player_map = [[None] * 7] * 7
         self.game_manager = game_manager
 
         for player in self.game_manager.players:
@@ -34,6 +34,14 @@ class ClueMap:
 
     def get_player_map(self):
         return self.player_map
+
+    def is_surrounded(self, x, y):
+        return not(
+            (x + 1 < len(self.player_map) and self.player_map[x + 1][y] is None) or
+            (x - 1 >= 0 and self.player_map[x - 1][y] is None) or
+            (y + 1 < len(self.player_map[0]) and self.player_map[x][y + 1] is None) or
+            (y - 1 >= 0 and self.player_map[x][y - 1] is None)
+        )
 
     def move_weapon(self, weapon, new_room):
         self.weapon_map[weapon] = new_room
