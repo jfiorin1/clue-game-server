@@ -22,8 +22,14 @@ class PlayerTurnManager:
     def next_phase(self):
         self.phase = TurnPhase(self.phase.value + 1)
 
+    def skip_to_suggest(self):
+        self.phase = TurnPhase.SUGGEST
+
     def skip_to_accuse(self):
         self.phase = TurnPhase.ACCUSE
+
+    def skip_to_end(self):
+        self.phase = TurnPhase.END
 
 class TurnPhase(Enum):
     START = 0
@@ -31,3 +37,4 @@ class TurnPhase(Enum):
     SUGGEST = 2
     REFUTE = 3
     ACCUSE = 4
+    END = 5

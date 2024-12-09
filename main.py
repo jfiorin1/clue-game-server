@@ -29,8 +29,71 @@ async def handler(websocket):
 # start server to run forever
 async def main():
     async with serve(handler, "", 3000):
+        # dummy = {
+        #     "message_type": "player_join",
+        #     "player_name": "xxXXSniperYoMama420Xxx"
+        # }
+        # dummy_json = json.dumps(dummy)
+        # game_manager.parse_message(dummy_json)
+        # dummy = {
+        #     "message_type": "player_join",
+        #     "player_name": "1xxXXSniperYoMama420Xxx"
+        # }
+        # dummy_json = json.dumps(dummy)
+        # game_manager.parse_message(dummy_json)
+        # dummy = {
+        #     "message_type": "player_join",
+        #     "player_name": "2xxXXSniperYoMama420Xxx"
+        # }
+        # dummy_json = json.dumps(dummy)
+        # game_manager.parse_message(dummy_json)
+        #
+        # dummy = {
+        #     "message_type": "player_ready",
+        #     "player_name": "xxXXSniperYoMama420Xxx"
+        # }
+        # dummy_json = json.dumps(dummy)
+        # game_manager.parse_message(dummy_json)
+        # dummy = {
+        #     "message_type": "player_ready",
+        #     "player_name": "1xxXXSniperYoMama420Xxx"
+        # }
+        # dummy_json = json.dumps(dummy)
+        # game_manager.parse_message(dummy_json)
+        # dummy = {
+        #     "message_type": "player_ready",
+        #     "player_name": "2xxXXSniperYoMama420Xxx"
+        # }
+        # dummy_json = json.dumps(dummy)
+        # game_manager.parse_message(dummy_json)
+        # print(game_manager.index, game_manager.players[game_manager.index].name, game_manager.players[game_manager.index].turn.phase)
+        #
+        # dummy = {
+        #     "message_type": "set_inactive",
+        #     "player_name": "2xxXXSniperYoMama420Xxx"
+        # }
+        # dummy_json = json.dumps(dummy)
+        # game_manager.parse_message(dummy_json)
+        #
+        # for i in range(20):
+        #     dummy = {
+        #         "message_type": "next_phase",
+        #         "player_name": "xxXXSniperYoMama420Xxx"
+        #     }
+        #     dummy_json = json.dumps(dummy)
+        #     game_manager.parse_message(dummy_json)
+        #     print(game_manager.index, game_manager.players[game_manager.index].name,
+        #           game_manager.players[game_manager.index].turn.phase)
+        #
+        # dummy = {
+        #     "message_type": "skip_to_end",
+        #     "player_name": "1xxXXSniperYoMama420Xxx"
+        # }
+        # dummy_json = json.dumps(dummy)
+        # game_manager.parse_message(dummy_json)
+        # print(game_manager.index, game_manager.players[game_manager.index].name,
+        #       game_manager.players[game_manager.index].turn.phase)
 
-        print(game_manager.json_serialize())
         # [print(player.characterHandler.character.value) for player in game_manager.players]
         await asyncio.get_running_loop().create_future()
 
